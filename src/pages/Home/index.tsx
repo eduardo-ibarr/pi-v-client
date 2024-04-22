@@ -1,7 +1,8 @@
 import { Typography } from "@material-tailwind/react";
 import Carousel from "../../components/Carousel";
-import { DrawerDefault } from "../../components/Drawer";
 import { ProductCard } from "../../components/ProductCard";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 function HomePage() {
   const images = [
@@ -12,19 +13,7 @@ function HomePage() {
 
   return (
     <div>
-      <header className="bg-gray-800 text-white py-4">
-        <div className="container mx-auto flex items-center w-full">
-          <DrawerDefault />
-
-          <div className="text-xl font-bold mx-4">Logo</div>
-
-          {/* <input
-              type="text"
-              placeholder="Buscar produtos..."
-              className="w-96 bg-gray-700 text-white border border-gray-600 rounded py-2 px-4 focus:outline-none focus:border-gray-500 "
-            /> */}
-        </div>
-      </header>
+      <Header />
 
       <div className="mt-8 flex justify-center">
         <Carousel images={images} />
@@ -69,11 +58,7 @@ function HomePage() {
         ))}
       </div>
 
-      <footer className="bg-gray-800 text-white py-4 mt-8">
-        <div className="container mx-auto">
-          <div>Dados de Contato</div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
