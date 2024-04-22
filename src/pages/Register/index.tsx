@@ -7,11 +7,8 @@ function RegisterPage() {
   const [password, setPassword] = useState('');
   const [formError, setFormError] = useState('');
 
-  // Função para formatar o número de telefone com a máscara desejada
   const formatPhoneNumber = (input: string) => {
-    // Remove todos os caracteres não numéricos
     const cleaned = input.replace(/\D/g, '');
-    
     // MÁSCARA (55)XXXXX-XXXX
     const match = cleaned.match(/^(\d{2})(\d{4,5})(\d{4})$/);
     if (match) {
@@ -20,13 +17,12 @@ function RegisterPage() {
     return input;
   };
 
-  // Manipula a mudança no campo de telefone e aplica a formatação
   const handlePhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
-    // Remove caracteres não numéricos
     const input = e.target.value.replace(/\D/g, '');
     const formattedPhone = formatPhoneNumber(input);
     setPhone(formattedPhone);
   };
+  
   // LIDAR COM SUBMIT DO FORMS
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
