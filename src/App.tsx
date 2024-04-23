@@ -18,9 +18,9 @@ const router = createBrowserRouter([
     element: <PageNotFound />,
   },
   {
-    path: "register",
+    path: "/register",
     element: <RegisterPage />,
-  }
+  },
 ]);
 
 export default function App() {

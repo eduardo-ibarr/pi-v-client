@@ -1,5 +1,7 @@
 // import Footer from "../../components/Footer";
+import Footer from "../../components/Footer";
 import Header from "../../components/Header";
+import { Link } from "react-router-dom";
 
 function LoginPage() {
   return (
@@ -34,13 +36,20 @@ function LoginPage() {
             >
               Entrar
             </button>
+            <button
+              type="button"
+              className="bg-gray-800 w-full text-white cursor-pointer transition duration-1000
+            rounded h-9 hover:bg-white hover:text-black"
+            >
+              <Link to="/register">Registrar</Link>
+            </button>
             <a href="#" className="hover:border-blue-400 ">
               Esqueceu a senha?
             </a>
           </form>
         </div>
       </div>
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 }
