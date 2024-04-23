@@ -34,7 +34,7 @@ function LoginPage() {
             >
               Entrar
             </button>
-            <a href="#" className="hover:border-blue-400 ">
+            <a href="#" className="hover:border-blue-400">
               Esqueceu a senha?
             </a>
           </form>

@@ -1,4 +1,6 @@
 import React, { useState, FormEvent, ChangeEvent } from 'react';
+import Header from "../../components/Header";
+import Footer from '../../components/Footer';
 
 function RegisterPage() {
   const [fullName, setFullName] = useState('');
@@ -37,11 +39,11 @@ function RegisterPage() {
 
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <div className="w-96 p-8 border rounded shadow bg-white">
-        <h2 className="text-center text-2xl font-bold mb-4">CADASTRO</h2>
+      <div className="w-96 p-6 rounded-md bg-gray-100 p-6 rounded-md shadow-md">
+        <h2 className="text-center text-2xl mb-4 ">CADASTRO</h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="fullName" className="font-bold">Nome Completo</label>
+            <label htmlFor="fullName" className="">Nome Completo</label>
             <input
               type="text"
               value={fullName}
@@ -51,7 +53,7 @@ function RegisterPage() {
             />
           </div>
           <div>
-            <label htmlFor="phone" className="font-bold">Telefone</label>
+            <label htmlFor="phone" className="">Telefone</label>
             <input
               type="text"
               value={phone}
@@ -62,7 +64,7 @@ function RegisterPage() {
             />
           </div>
           <div>
-            <label htmlFor="email" className="font-bold">Email</label>
+            <label htmlFor="email" className="">Email</label>
             <input
               type="email"
               value={email}
@@ -71,7 +73,7 @@ function RegisterPage() {
             />
           </div>
           <div>
-            <label htmlFor="password" className="font-bold">Senha (mínimo 6 caracteres)</label>
+            <label htmlFor="password" className="">Senha (mínimo 6 caracteres)</label>
             <input
               type="password"
               value={password}
@@ -83,7 +85,8 @@ function RegisterPage() {
           {formError && <p className="text-red-500">{formError}</p>}
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white font-bold py-2 rounded hover:bg-blue-700"
+            className="bg-gray-800 w-full text-white cursor-pointer transition duration-1000
+            rounded py-2 hover:bg-white hover:text-black "
           >
             CONTINUAR
           </button>
