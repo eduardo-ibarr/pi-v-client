@@ -5,7 +5,7 @@ import { client } from "./client";
 export class AuthServices {
   static async login(data: LoginData) {
     try {
-      const response = await client.post("/auth", data);
+      const response = await client.post("/auth/login", data);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
