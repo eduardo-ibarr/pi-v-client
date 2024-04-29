@@ -5,6 +5,7 @@ import PageNotFound from "./pages/PageNotFound";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
+import RegisterPage from "./pages/Register";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: "*",
     element: <PageNotFound />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
   },
 ]);
 
