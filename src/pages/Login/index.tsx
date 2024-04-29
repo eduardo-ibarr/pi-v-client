@@ -1,7 +1,22 @@
 // import Footer from "../../components/Footer";
+import { useState } from "react";
 import Header from "../../components/Header";
+import { useLogin } from "../../hooks/auth/useLogin";
 
 function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { mutateAsync: login } = useLogin();
+
+  async function handleLogin() {
+    try {
+      await login({ email, password });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div>
       <Header />
@@ -13,6 +28,7 @@ function LoginPage() {
               <input
                 className="border-2 p-1 rounded  py-2 px-4"
                 type="text"
+                onChange={(event) => setEmail(event.target.value)}
                 placeholder="exemplo@gmail.com"
               />
             </div>
@@ -23,12 +39,13 @@ function LoginPage() {
               <input
                 className="border-2 p-1 rounded  py-2 px-4"
                 type="password"
+                onChange={(event) => setPassword(event.target.value)}
                 placeholder="*****"
               />
             </div>
             <button
-              type="submit"
-              disabled
+              type="button"
+              onClick={handleLogin}
               className="bg-gray-800 w-full text-white cursor-pointer transition duration-1000
             rounded h-9 hover:bg-white hover:text-black"
             >
