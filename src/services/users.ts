@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import {
   RegisterData,
   UpdateProfileData,
@@ -9,32 +10,68 @@ import { client } from "./client";
 
 export class UsersServices {
   static async register(data: RegisterData) {
-    const response = await client.post("/users", data);
-    return response.data;
+    try {
+      const response = await client.post("/users", data);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data.message);
+      }
+    }
   }
 
   static async getProfile() {
-    const response = await client.get("/users");
-    return response.data;
+    try {
+      const response = await client.get("/users");
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data.message);
+      }
+    }
   }
 
   static async updateProfile(data: UpdateProfileData) {
-    const response = await client.put("/users", data);
-    return response.data;
+    try {
+      const response = await client.put("/users", data);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data.message);
+      }
+    }
   }
 
   static async updatePassword(data: UpdatePasswordData) {
-    const response = await client.put("/users/password", data);
-    return response.data;
+    try {
+      const response = await client.put("/users/password", data);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data.message);
+      }
+    }
   }
 
   static async forgotPassword(data: ForgotPasswordData) {
-    const response = await client.post("/users/forgot-password", data);
-    return response.data;
+    try {
+      const response = await client.post("/users/forgot-password", data);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data.message);
+      }
+    }
   }
 
   static async resetPassword(data: ResetPasswordData) {
-    const response = await client.post("/users/reset-password", data);
-    return response.data;
+    try {
+      const response = await client.post("/users/reset-password", data);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data.message);
+      }
+    }
   }
 }

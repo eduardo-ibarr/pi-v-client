@@ -60,9 +60,9 @@ function LoginPage() {
             >
               <Link to="/register">Registrar</Link>
             </button>
-            <a href="#" className="hover:border-blue-400 ">
+            <Link className="hover:border-blue-400" to="/forgot-password">
               Esqueceu a senha?
-            </a>
+            </Link>
           </form>
         </div>
       </div>
