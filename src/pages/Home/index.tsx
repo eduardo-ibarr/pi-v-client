@@ -3,18 +3,48 @@ import Carousel from "../../components/Carousel";
 import { ProductCard } from "../../components/ProductCard";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import axios from 'axios';
+import {useEffect, useState} from 'react';
+
+interface IFeedItem {
+  id: string;
+  media_type: "IMAGE" | "VIDEO";
+  media_url: string;
+  permalink: string;
+}
+
+function InstaFeed() {
+  const [feedList, setFeedList] = useState<IFeedItem[]>([]);
+
+  async function getInstaFeed() {
+    const token = import.meta.env.VITE_INSTA_TOKEN;
+    const fields = "media_url,media_type,permalink";
+    const url = `https://graph.instagram.com/me/media?access_token=${token}&fields=${fields}`;
+
+    try {
+      const { data } = await axios.get(url);
+      setFeedList(data.data);
+    } catch (error) {
+      console.error("Error fetching Instagram feed:", error);
+    }
+  }
+
+  useEffect(() => {
+    getInstaFeed();
+  }, []);
+
+  // Extrair apenas os URLs de mídia
+  const mediaUrls = feedList.map(item => item.media_url);
+
+  return mediaUrls;
+}
 
 function HomePage() {
-  const images = [
-    "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80",
-    "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80",
-    "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80",
-  ];
-
+  const images = InstaFeed();
+  
   return (
     <div>
       <Header />
-
       <div className="mt-8 flex justify-center">
         <Carousel images={images} />
       </div>
