@@ -1,8 +1,7 @@
 import { Typography } from "@material-tailwind/react";
 import Carousel from "../../components/Carousel";
 import { ProductCard } from "../../components/ProductCard";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
+import useTokenData from "../../hooks/app/useTokenData";
 
 function HomePage() {
   const images = [
@@ -11,10 +10,12 @@ function HomePage() {
     "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80",
   ];
 
-  return (
-    <div>
-      <Header />
+  const tokenData = useTokenData();
 
+  console.log(tokenData);
+
+  return (
+    <>
       <div className="mt-8 flex justify-center">
         <Carousel images={images} />
       </div>
@@ -57,9 +58,7 @@ function HomePage() {
           <ProductCard key={product} />
         ))}
       </div>
-
-      <Footer />
-    </div>
+    </>
   );
 }
 

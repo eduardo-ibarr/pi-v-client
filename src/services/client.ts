@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getAccessToken } from "../utils/auth";
 
 export const client = axios.create({
   baseURL: "http://34.227.53.207:3333",
@@ -8,9 +9,11 @@ export const client = axios.create({
 });
 
 client.interceptors.request.use((config) => {
-  // if (token) {
-  //   config.headers.Authorization = `Bearer ${token}`;
-  // }
+  const token = getAccessToken();
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
 
   return config;
 });
