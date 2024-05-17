@@ -4,8 +4,6 @@ import {
   List,
   ListItem,
   ListItemPrefix,
-  ListItemSuffix,
-  Chip,
 } from "@material-tailwind/react";
 import {
   PresentationChartBarIcon,
@@ -15,62 +13,113 @@ import {
   InboxIcon,
   PowerIcon,
 } from "@heroicons/react/24/solid";
+import useTokenData from "../../hooks/app/useTokenData";
+import { useNavigate } from "react-router-dom";
 
 export default function DefaultSidebar() {
-  return (
-    <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
-      <div className="mb-2 p-4">
-        <Typography variant="h5" color="blue-gray">
-          Sidebar
-        </Typography>
-      </div>
-      <List>
-        <ListItem>
-          <ListItemPrefix>
-            <PresentationChartBarIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          Dashboard
-        </ListItem>
-        <ListItem>
-          <ListItemPrefix>
-            <ShoppingBagIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          E-Commerce
-        </ListItem>
-        <ListItem>
-          <ListItemPrefix>
-            <InboxIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          Inbox
-          <ListItemSuffix>
-            <Chip
-              value="14"
-              size="sm"
-              variant="ghost"
-              color="blue-gray"
-              className="rounded-full"
-            />
-          </ListItemSuffix>
-        </ListItem>
-        <ListItem>
-          <ListItemPrefix>
-            <UserCircleIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          Profile
-        </ListItem>
-        <ListItem>
-          <ListItemPrefix>
-            <Cog6ToothIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          Settings
-        </ListItem>
-        <ListItem>
-          <ListItemPrefix>
-            <PowerIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          Log Out
-        </ListItem>
-      </List>
-    </Card>
-  );
+  const tokenData = useTokenData();
+  const navigate = useNavigate();
+
+  if (!tokenData) {
+    return null;
+  }
+
+  if (tokenData.role === "admin") {
+    return (
+      <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
+        <div className="mb-2 p-4">
+          <Typography variant="h5" color="blue-gray">
+            Menu de Navegação
+          </Typography>
+        </div>
+
+        <List>
+          <ListItem onClick={() => navigate("/admin/dashboard")}>
+            <ListItemPrefix>
+              <PresentationChartBarIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            Dashboard
+          </ListItem>
+
+          <ListItem onClick={() => navigate("/admin/products")}>
+            <ListItemPrefix>
+              <ShoppingBagIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            Produtos
+          </ListItem>
+
+          <ListItem onClick={() => navigate("/admin/orders")}>
+            <ListItemPrefix>
+              <InboxIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            Pedidos
+          </ListItem>
+
+          <ListItem onClick={() => navigate("/admin/users")}>
+            <ListItemPrefix>
+              <UserCircleIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            Usuários
+          </ListItem>
+
+          <ListItem onClick={() => navigate("/admin/config")}>
+            <ListItemPrefix>
+              <Cog6ToothIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            Configurações
+          </ListItem>
+
+          <ListItem onClick={() => navigate("/logout")}>
+            <ListItemPrefix>
+              <PowerIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            Sair do Sistema
+          </ListItem>
+        </List>
+      </Card>
+    );
+  }
+
+  if (tokenData.role === "user") {
+    return (
+      <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
+        <div className="mb-2 p-4">
+          <Typography variant="h5" color="blue-gray">
+            Sidebar
+          </Typography>
+        </div>
+        <List>
+          <ListItem onClick={() => navigate("/dashboard")}>
+            <ListItemPrefix>
+              <ShoppingBagIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            Produtos
+          </ListItem>
+
+          <ListItem onClick={() => navigate("/orders")}>
+            <ListItemPrefix>
+              <InboxIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            Pedidos
+          </ListItem>
+
+          <ListItem onClick={() => navigate("/config")}>
+            <ListItemPrefix>
+              <Cog6ToothIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            Configurações
+          </ListItem>
+
+          <ListItem onClick={() => navigate("/logout")}>
+            <ListItemPrefix>
+              <PowerIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            Sair do sistema
+          </ListItem>
+        </List>
+      </Card>
+    );
+  }
+
+  return null;
 }

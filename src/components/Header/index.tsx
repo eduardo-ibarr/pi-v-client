@@ -6,7 +6,7 @@ function Header() {
       <div className="container mx-auto flex items-center w-full">
         <DrawerDefault />
 
-        <div className="text-xl font-bold mx-4">Logo</div>
+        <div className="text-xl font-bold mx-4">marilika</div>
 
         {/* <input
               type="text"

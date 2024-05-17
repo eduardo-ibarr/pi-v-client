@@ -6,6 +6,18 @@ export interface RegisterData {
   role: string;
 }
 
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  role: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string;
+  is_active: boolean;
+}
+
 export interface UpdateProfileData {
   name: string;
   email: string;

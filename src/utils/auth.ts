@@ -12,31 +12,19 @@ export const getAccessToken = () => {
 
   if (data) {
     const result = JSON.parse(data);
+    const decoded = jwtDecode(result.token) as any;
 
-    if (result && moment(result.expirationDate).utc() > now) {
-      return result;
+    if (decoded.exp < now.unix()) {
+      clearAccessToken();
+      return null;
     }
 
-    clearAccessToken();
-
-    return null;
+    return result.token;
   }
 
   return null;
 };
 
 export const setAccessToken = (data: any): void => {
-  const now = moment().utc();
-  const expiresAt = moment(now).add(data.expiresIn, "seconds");
-
-  const decodedToken: { email: string; role: string } = jwtDecode(data.token);
-
-  const tokenData = {
-    ...data,
-    email: decodedToken.email,
-    role: decodedToken.role,
-    expirationDate: expiresAt,
-  };
-
-  localStorage.setItem(ACCESS_TOKEN, JSON.stringify(tokenData));
+  localStorage.setItem(ACCESS_TOKEN, JSON.stringify(data));
 };
