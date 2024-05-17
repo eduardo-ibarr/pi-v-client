@@ -4,6 +4,7 @@ import LoginPage from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+
 const queryClient = new QueryClient();
 import RegisterPage from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
