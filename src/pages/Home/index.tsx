@@ -7,9 +7,13 @@ import FeaturedBrandsSection from "../../components/FeaturedBrandsSection";
 import SocialProofSection from "../../components/SocialProofSection";
 import TrendingStylesSection from "../../components/TrendingStylesSection";
 import { Review } from "../../components/SocialProofSection";
+import { FaInstagram } from "react-icons/fa";
+import useFeed from "../../hooks/instagram/useFeed";
 
 function HomePage() {
   const { data, isLoading } = useListProducts();
+
+  const imagesFeed = useFeed();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -41,6 +45,24 @@ function HomePage() {
         <TrendingStylesSection products={slicedProducts} />
         <FeaturedBrandsSection brands={["Nike", "Adidas", "Levi's", "Gucci"]} />
         <SocialProofSection reviews={reviews} />
+        <div className="mt-8 flex justify-center items-center">
+          <a
+            href="https://www.instagram.com/brechocomunitariosantiago/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mr-2"
+          >
+            <FaInstagram size={60} color="#993399" />
+          </a>
+          <div>
+            <p className="mb-2 text-2xl">SIGA-NOS NO INSTAGRAM!</p>
+            <p className="mb-2 text-2xl">VEJA ALGUMAS DE NOSSAS POSTAGENS:</p>
+          </div>
+        </div>
+
+        <div className="mt-8 flex justify-center">
+          <Carousel images={imagesFeed} />
+        </div>
       </main>
     </>
   );
