@@ -1,7 +1,7 @@
 import { jwtDecode } from "jwt-decode";
 import { getAccessToken } from "../../utils/auth";
 
-interface TokenData {
+export interface TokenData {
   email: string;
   role: string;
 }

@@ -13,4 +13,15 @@ export class AuthServices {
       }
     }
   }
+
+  static async logout() {
+    try {
+      const response = await client.post("/auth/logout");
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data.message);
+      }
+    }
+  }
 }

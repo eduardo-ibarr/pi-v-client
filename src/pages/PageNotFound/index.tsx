@@ -1,4 +1,17 @@
+import { useEffect } from "react";
+import useSendPageViewTrack from "../../hooks/trackings/useSendPageViewTrack";
+
 function PageNotFound() {
+  const { mutateAsync: sendTrack } = useSendPageViewTrack();
+
+  useEffect(() => {
+    sendTrack({
+      event_type: "page_view",
+      url: "/404",
+      user_id: null,
+    });
+  }, [sendTrack]);
+
   return (
     <div className="flex items-center justify-center h-screen bg-gray-200">
       <div className="text-center">

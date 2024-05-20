@@ -9,17 +9,16 @@ import TrendingStylesSection from "../../components/TrendingStylesSection";
 import { Review } from "../../components/SocialProofSection";
 import { FaInstagram } from "react-icons/fa";
 import useFeed from "../../hooks/instagram/useFeed";
+import useSendPageViewTrack from "../../hooks/trackings/useSendPageViewTrack";
+import { useEffect } from "react";
+import { Typography } from "@material-tailwind/react";
 
 function HomePage() {
   const { data, isLoading } = useListProducts();
 
+  const { mutateAsync: sendTrack } = useSendPageViewTrack();
+
   const imagesFeed = useFeed();
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  const slicedProducts = (data as Product[]).slice(0, 4);
 
   const reviews: Review[] = [
     {
@@ -36,11 +35,27 @@ function HomePage() {
     },
   ];
 
+  useEffect(() => {
+    sendTrack({
+      event_type: "page_view",
+      url: "/",
+      user_id: null,
+    });
+  }, [sendTrack]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  const slicedProducts = (data as Product[]).slice(0, 4);
+
   return (
     <>
-      <PromotionalBanner message="Frete grátis em compras acima de R$200!" />
+      <PromotionalBanner message="Abriremos neste final de semana!" />
       <main className="container mx-auto w-full">
-        <Carousel images={[]} />
+        <div className="mt-8 flex justify-center">
+          <Carousel images={imagesFeed} />
+        </div>
         <NewArrivalsSection products={slicedProducts} />
         <TrendingStylesSection products={slicedProducts} />
         <FeaturedBrandsSection brands={["Nike", "Adidas", "Levi's", "Gucci"]} />
@@ -54,14 +69,7 @@ function HomePage() {
           >
             <FaInstagram size={60} color="#993399" />
           </a>
-          <div>
-            <p className="mb-2 text-2xl">SIGA-NOS NO INSTAGRAM!</p>
-            <p className="mb-2 text-2xl">VEJA ALGUMAS DE NOSSAS POSTAGENS:</p>
-          </div>
-        </div>
-
-        <div className="mt-8 flex justify-center">
-          <Carousel images={imagesFeed} />
+          <Typography className=" text-xl">SIGA-NOS NO INSTAGRAM</Typography>
         </div>
       </main>
     </>

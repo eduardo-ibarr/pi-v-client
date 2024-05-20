@@ -15,8 +15,8 @@ const TrendingStylesSection: React.FC<TrendingStylesSectionProps> = ({
       <Typography variant="h4" className="text-center mb-4">
         Estilos em Alta
       </Typography>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {products.map((product) => (
+      <div className="flex justify-center gap-12">
+        {[products[0], products[3]].map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>

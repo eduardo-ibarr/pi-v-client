@@ -11,13 +11,13 @@ export function DrawerDefault() {
   const closeDrawer = () => setOpen(false);
 
   return (
-    <React.Fragment>
+    <>
       <IconButton onClick={openDrawer} variant="text" color="white">
         <RxHamburgerMenu size={30} />
       </IconButton>
       <Drawer open={open} onClose={closeDrawer} className="p-4">
         <DefaultSidebar />
       </Drawer>
-    </React.Fragment>
+    </>
   );
 }

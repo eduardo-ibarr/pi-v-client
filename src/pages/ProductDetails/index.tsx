@@ -3,12 +3,22 @@ import { Typography, Button, Breadcrumbs } from "@material-tailwind/react";
 import useShowProduct from "../../hooks/products/useShowProduct";
 import { formatPrice } from "../../utils/format";
 import { BsFillCartPlusFill } from "react-icons/bs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useSendProductViewTrack from "../../hooks/trackings/useSendProductViewTrack";
 
 function ProductDetails() {
   const { productId } = useParams();
   const { data: product, isLoading } = useShowProduct(productId || "");
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const { mutateAsync: sendTrack } = useSendProductViewTrack();
+
+  useEffect(() => {
+    sendTrack({
+      event_type: "product_view",
+      product_id: Number(productId),
+      user_id: null,
+    });
+  }, [productId, sendTrack]);
 
   if (isLoading) {
     return <div>Carregando...</div>;
@@ -61,13 +71,6 @@ function ProductDetails() {
             <BsFillCartPlusFill className="mr-2" /> Reservar este item
           </Button>
         </div>
-      </div>
-
-      <div className="mt-8">
-        <Typography variant="h5" className="font-bold mb-4">
-          Você também pode gostar
-        </Typography>
-        {/* ... (código para exibir produtos relacionados) */}
       </div>
     </div>
   );

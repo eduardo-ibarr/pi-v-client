@@ -6,11 +6,11 @@ import {
   ListItemPrefix,
 } from "@material-tailwind/react";
 import {
-  PresentationChartBarIcon,
-  ShoppingBagIcon,
-  UserCircleIcon,
-  Cog6ToothIcon,
-  InboxIcon,
+  // PresentationChartBarIcon,
+  // ShoppingBagIcon,
+  // UserCircleIcon,
+  // Cog6ToothIcon,
+  // InboxIcon,
   PowerIcon,
 } from "@heroicons/react/24/solid";
 import useTokenData from "../../hooks/app/useTokenData";
@@ -20,11 +20,7 @@ export default function DefaultSidebar() {
   const tokenData = useTokenData();
   const navigate = useNavigate();
 
-  if (!tokenData) {
-    return null;
-  }
-
-  if (tokenData.role === "admin") {
+  if (tokenData?.role === "admin") {
     return (
       <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
         <div className="mb-2 p-4">
@@ -34,7 +30,7 @@ export default function DefaultSidebar() {
         </div>
 
         <List>
-          <ListItem onClick={() => navigate("/admin/dashboard")}>
+          {/* <ListItem onClick={() => navigate("/admin/dashboard")}>
             <ListItemPrefix>
               <PresentationChartBarIcon className="h-5 w-5" />
             </ListItemPrefix>
@@ -67,20 +63,28 @@ export default function DefaultSidebar() {
               <Cog6ToothIcon className="h-5 w-5" />
             </ListItemPrefix>
             Configurações
-          </ListItem>
+          </ListItem> */}
 
-          <ListItem onClick={() => navigate("/logout")}>
+          <ListItem
+            onClick={() => {
+              if (tokenData) {
+                navigate("/logout");
+              } else {
+                navigate("/login");
+              }
+            }}
+          >
             <ListItemPrefix>
               <PowerIcon className="h-5 w-5" />
             </ListItemPrefix>
-            Sair do Sistema
+            {tokenData ? "Sair" : "Entrar"}
           </ListItem>
         </List>
       </Card>
     );
   }
 
-  if (tokenData.role === "user") {
+  if (tokenData?.role === "user" || !tokenData?.role) {
     return (
       <Card className="h-[calc(100vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
         <div className="mb-2 p-4">
@@ -89,7 +93,7 @@ export default function DefaultSidebar() {
           </Typography>
         </div>
         <List>
-          <ListItem onClick={() => navigate("/dashboard")}>
+          {/* <ListItem onClick={() => navigate("/dashboard")}>
             <ListItemPrefix>
               <ShoppingBagIcon className="h-5 w-5" />
             </ListItemPrefix>
@@ -108,13 +112,21 @@ export default function DefaultSidebar() {
               <Cog6ToothIcon className="h-5 w-5" />
             </ListItemPrefix>
             Configurações
-          </ListItem>
+          </ListItem> */}
 
-          <ListItem onClick={() => navigate("/logout")}>
+          <ListItem
+            onClick={() => {
+              if (tokenData) {
+                navigate("/logout");
+              } else {
+                navigate("/login");
+              }
+            }}
+          >
             <ListItemPrefix>
               <PowerIcon className="h-5 w-5" />
             </ListItemPrefix>
-            Sair do sistema
+            {tokenData ? "Sair" : "Entrar"}
           </ListItem>
         </List>
       </Card>

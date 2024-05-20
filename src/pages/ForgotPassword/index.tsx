@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useForgotPassword } from "../../hooks/users/useForgotPassword";
 import { useResetPassword } from "../../hooks/users/useResetPassword";
 import { useNavigate } from "react-router-dom";
+import useSendPageViewTrack from "../../hooks/trackings/useSendPageViewTrack";
 
 const ForgotPassword: React.FC = () => {
   const {
@@ -18,6 +19,8 @@ const ForgotPassword: React.FC = () => {
     error: resetPasswordError,
     isSuccess: isResetPasswordSuccess,
   } = useResetPassword();
+
+  const { mutateAsync: sendTrack } = useSendPageViewTrack();
 
   const navigate = useNavigate();
 
@@ -84,6 +87,14 @@ const ForgotPassword: React.FC = () => {
     forgotPasswordError,
     resetPasswordError,
   ]);
+
+  useEffect(() => {
+    sendTrack({
+      event_type: "page_view",
+      url: "/forgot-password",
+      user_id: null,
+    });
+  }, [sendTrack]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

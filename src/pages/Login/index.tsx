@@ -1,20 +1,44 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLogin } from "../../hooks/auth/useLogin";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import useSendPageViewTrack from "../../hooks/trackings/useSendPageViewTrack";
+import { getAccessToken } from "../../utils/auth";
+import { jwtDecode } from "jwt-decode";
+import { TokenData } from "../../hooks/app/useTokenData";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const { mutateAsync: login } = useLogin();
+  const { mutateAsync: sendTrack } = useSendPageViewTrack();
+
+  const navigate = useNavigate();
 
   async function handleLogin() {
     try {
       await login({ email, password });
+
+      const token = getAccessToken();
+      const tokenDecoded = jwtDecode(token) as TokenData;
+
+      if (tokenDecoded.role === "admin") {
+        navigate("/admin/dashboard");
+      }
+
+      navigate("/");
     } catch (error) {
       console.error(error);
     }
   }
+
+  useEffect(() => {
+    sendTrack({
+      event_type: "page_view",
+      url: "/login",
+      user_id: null,
+    });
+  }, [sendTrack]);
 
   return (
     <div className="flex justify-center items-center h-screen">

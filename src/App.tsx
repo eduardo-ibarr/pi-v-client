@@ -15,6 +15,7 @@ import DashboardPage from "./pages/__private/Dashboard";
 import ProductsPage from "./pages/__private/Products";
 import ProductDetails from "./pages/ProductDetails"; // Adicione a importação do ProductDetails
 import Layout from "./styles/Layout";
+import Logout from "./pages/Logout";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
         ),
       }, // Rota principal da home
       { path: "login", element: <LoginPage /> },
+      { path: "logout", element: <Logout /> },
       { path: "register", element: <RegisterPage /> },
       { path: "forgot-password", element: <ForgotPassword /> },
       {

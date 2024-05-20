@@ -1,8 +1,10 @@
-import { useState, FormEvent, ChangeEvent } from "react";
+import { useState, FormEvent, ChangeEvent, useEffect } from "react";
 import { useRegisterUser } from "../../hooks/users/useRegisterUser";
+import useSendPageViewTrack from "../../hooks/trackings/useSendPageViewTrack";
 
-function RegisterPage() {
+export default function RegisterPage() {
   const { mutateAsync: register, isError, isSuccess } = useRegisterUser();
+  const { mutateAsync: sendTrack } = useSendPageViewTrack();
 
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
@@ -42,9 +44,15 @@ function RegisterPage() {
       password,
       role: "user",
     });
-
-    console.log({ fullName, phone, email, password });
   };
+
+  useEffect(() => {
+    sendTrack({
+      event_type: "page_view",
+      url: "/register",
+      user_id: null,
+    });
+  }, [sendTrack]);
 
   if (isSuccess) {
     return (
@@ -135,5 +143,3 @@ function RegisterPage() {
     </div>
   );
 }
-
-export default RegisterPage;
