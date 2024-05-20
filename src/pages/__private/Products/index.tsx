@@ -1,21 +1,11 @@
-import {
-  Typography,
-  Button,
-  Card,
-  IconButton,
-  Tooltip,
-} from "@material-tailwind/react";
+import { Typography, Button } from "@material-tailwind/react";
 import { Link } from "react-router-dom"; // Importe o componente Link para navegação
 import useListProducts from "../../../hooks/products/useListProducts";
 import { Product } from "../../../models/products";
-import { formatDate } from "../../../utils/date";
-import { PencilIcon } from "@heroicons/react/24/solid";
 import { AdminProductCard } from "./components/AdminProductCard";
 
 export default function AdminProductsPage() {
   const { data, isLoading, isError, error } = useListProducts();
-
-  const HEADS = ["Nome", "Preço", "Categoria", "Criado em", "Ações"];
 
   if (isLoading) {
     return <div>Loading...</div>;
