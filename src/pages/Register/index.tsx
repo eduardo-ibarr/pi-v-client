@@ -1,50 +1,31 @@
-import { useState, FormEvent, ChangeEvent, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useRegisterUser } from "../../hooks/users/useRegisterUser";
 import useSendPageViewTrack from "../../hooks/trackings/useSendPageViewTrack";
+import {
+  Button,
+  Input,
+  Typography,
+  Select,
+  Option,
+} from "@material-tailwind/react";
+import { RegisterData } from "../../models/users";
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
+
+type FormValues = RegisterData;
 
 export default function RegisterPage() {
-  const { mutateAsync: register, isError, isSuccess } = useRegisterUser();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<FormValues>();
+  const { mutateAsync: registerUser, isSuccess } = useRegisterUser();
   const { mutateAsync: sendTrack } = useSendPageViewTrack();
-
-  const [fullName, setFullName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [formError, setFormError] = useState("");
-
-  const formatPhoneNumber = (input: string) => {
-    const cleaned = input.replace(/\D/g, "");
-    // MÁSCARA (55)XXXXX-XXXX
-    const match = cleaned.match(/^(\d{2})(\d{4,5})(\d{4})$/);
-    if (match) {
-      return `(${match[1]}) ${match[2]}-${match[3]}`;
-    }
-    return input;
-  };
-
-  const handlePhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const input = e.target.value.replace(/\D/g, "");
-    const formattedPhone = formatPhoneNumber(input);
-    setPhone(formattedPhone);
-  };
-
-  // LIDAR COM SUBMIT DO FORMS
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (password.length < 6) {
-      setFormError("A senha deve ter pelo menos 6 caracteres.");
-      return;
-    }
-
-    await register({
-      name: fullName,
-      phone,
-      email,
-      password,
-      role: "user",
-    });
-  };
+  const [formError, setFormError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     sendTrack({
@@ -56,88 +37,194 @@ export default function RegisterPage() {
 
   if (isSuccess) {
     return (
-      <div className="flex flex-col items-center min-h-screen">
-        <h2 className="text-2xl mt-8">Cadastro realizado com sucesso!</h2>
-        <p className="text-gray-500">
-          Seu cadastro foi realizado com sucesso. Faça login para continuar.
-        </p>
+      <div className="flex justify-center items-center min-h-screen bg-gray-50 p-10">
+        <div className="bg-white p-8 rounded-md shadow-md w-full max-w-lg">
+          <Typography variant="h3" className="text-center mb-6 text-gray-900">
+            Cadastro Realizado
+          </Typography>
+          <Typography className="text-center text-gray-900">
+            Seu cadastro foi realizado com sucesso. Agora você já pode fazer seu
+            login.
+          </Typography>
+          <Button
+            onClick={() => navigate("/login")}
+            fullWidth
+            className="my-4 bg-gray-800 text-white"
+          >
+            Fazer Login
+          </Button>
+        </div>
       </div>
     );
   }
 
-  if (isError) {
-    return (
-      <div className="flex flex-col items-center min-h-screen">
-        <h2 className="text-2xl mt-8">Erro ao realizar cadastro</h2>
-        <p className="text-gray-500">
-          Ocorreu um erro ao realizar o cadastro. Tente novamente.
-        </p>
-      </div>
-    );
-  }
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    if (data.password.length < 6) {
+      setFormError("A senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
+
+    const gender: Record<string, string> = {
+      Masculino: "M",
+      Feminino: "F",
+      Outro: "O",
+    };
+
+    try {
+      await registerUser({
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+        password: data.password,
+        address: data.address,
+        birth_date: moment(data.birth_date).format("YYYY-MM-DD HH:mm:ss"),
+        gender: gender[data.gender],
+        role: "user",
+      });
+    } catch (error) {
+      setFormError("Ocorreu um erro ao realizar o cadastro. Tente novamente.");
+    }
+  };
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <div className="w-96 p-6 rounded-md bg-gray-100 p-6 rounded-md shadow-md">
-        <h2 className="text-center text-2xl mb-4 ">CADASTRO</h2>
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="fullName" className="">
-              Nome Completo
-            </label>
-            <input
-              type="text"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              className="w-full p-2 border rounded"
-              required
+    <div className="flex justify-center items-center min-h-screen bg-gray-50 p-10">
+      <div className="bg-white p-8 rounded-md shadow-md w-full max-w-lg">
+        <Typography variant="h3" className="text-center mb-6 text-gray-900">
+          Cadastro
+        </Typography>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div className="flex flex-col w-full">
+            <Input
+              crossOrigin={"anonymous"}
+              label="Nome Completo"
+              {...register("name", { required: "Nome Completo é obrigatório" })}
+              error={!!errors.name}
+              className="border p-2 rounded mt-1"
+              placeholder="Seu nome completo"
             />
+            {errors.name && (
+              <Typography variant="small" color="red" className="mt-1">
+                {errors.name.message}
+              </Typography>
+            )}
           </div>
-          <div>
-            <label htmlFor="phone" className="">
-              Telefone
-            </label>
-            <input
-              type="text"
-              value={phone}
-              onChange={handlePhoneChange}
-              maxLength={15}
-              className="w-full p-2 border rounded"
-              required
+          <div className="flex flex-col w-full">
+            <Input
+              crossOrigin={"anonymous"}
+              label="Telefone"
+              {...register("phone", { required: "Telefone é obrigatório" })}
+              error={!!errors.phone}
+              className="border p-2 rounded mt-1"
+              placeholder="(XX) XXXXX-XXXX"
             />
+            {errors.phone && (
+              <Typography variant="small" color="red" className="mt-1">
+                {errors.phone.message}
+              </Typography>
+            )}
           </div>
-          <div>
-            <label htmlFor="email" className="">
-              Email
-            </label>
-            <input
+          <div className="flex flex-col w-full">
+            <Input
+              crossOrigin={"anonymous"}
+              label="Email"
               type="email"
-              value={email}
-              required
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 border rounded"
+              {...register("email", { required: "Email é obrigatório" })}
+              error={!!errors.email}
+              className="border p-2 rounded mt-1"
+              placeholder="exemplo@gmail.com"
             />
+            {errors.email && (
+              <Typography variant="small" color="red" className="mt-1">
+                {errors.email.message}
+              </Typography>
+            )}
           </div>
-          <div>
-            <label htmlFor="password" className="">
-              Senha (mínimo 6 caracteres)
-            </label>
-            <input
+          <div className="flex flex-col w-full">
+            <Input
+              crossOrigin={"anonymous"}
+              label="Senha"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 border rounded"
-              required
+              {...register("password", { required: "Senha é obrigatória" })}
+              error={!!errors.password}
+              className="border p-2 rounded mt-1"
+              placeholder="*****"
             />
+            {errors.password && (
+              <Typography variant="small" color="red" className="mt-1">
+                {errors.password.message}
+              </Typography>
+            )}
           </div>
-          {formError && <p className="text-red-500">{formError}</p>}
-          <button
+          <div className="flex flex-col w-full">
+            <Input
+              crossOrigin={"anonymous"}
+              label="Endereço"
+              {...register("address", { required: "Endereço é obrigatório" })}
+              error={!!errors.address}
+              className="border p-2 rounded mt-1"
+              placeholder="Seu endereço"
+            />
+            {errors.address && (
+              <Typography variant="small" color="red" className="mt-1">
+                {errors.address.message}
+              </Typography>
+            )}
+          </div>
+          <div className="flex flex-col w-full">
+            <Input
+              crossOrigin={"anonymous"}
+              label="Data de Nascimento"
+              type="date"
+              {...register("birth_date", {
+                required: "Data de nascimento é obrigatória",
+              })}
+              error={!!errors.birth_date}
+              className="border p-2 rounded mt-1"
+            />
+            {errors.birth_date && (
+              <Typography variant="small" color="red" className="mt-1">
+                {errors.birth_date.message}
+              </Typography>
+            )}
+          </div>
+          <div className="flex flex-col w-full">
+            <Controller
+              name="gender"
+              control={control}
+              rules={{ required: "Gênero é obrigatório" }}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  label="Gênero"
+                  error={!!errors.gender}
+                  className="border p-2 rounded mt-1"
+                  defaultValue=""
+                >
+                  <Option value="">Selecione seu gênero</Option>
+                  <Option value="Masculino">Masculino</Option>
+                  <Option value="Feminino">Feminino</Option>
+                  <Option value="Outro">Outro</Option>
+                </Select>
+              )}
+            />
+            {errors.gender && (
+              <Typography variant="small" color="red" className="mt-1">
+                {errors.gender.message}
+              </Typography>
+            )}
+          </div>
+          {formError && (
+            <Typography variant="small" color="red" className="mt-2">
+              {formError}
+            </Typography>
+          )}
+          <Button
             type="submit"
-            className="bg-gray-800 w-full text-white cursor-pointer transition duration-1000
-            rounded py-2 hover:bg-white hover:text-black "
+            fullWidth
+            className="my-4 bg-gray-800 text-white"
           >
-            CONTINUAR
-          </button>
+            Continuar
+          </Button>
         </form>
       </div>
     </div>
