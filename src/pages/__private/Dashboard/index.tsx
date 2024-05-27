@@ -51,7 +51,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
       <div className="container mx-auto py-8">
         <h1 className="text-3xl font-semibold mb-4">Dashboard</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-          <div className="bg-white p-6 rounded-lg shadow">
+          <div className="bg-white p-6 rounded-lg shadow flex items-center flex-col">
             <h2 className="text-xl font-semibold mb-4">
               Linha do Tempo de Visualizações
             </h2>
@@ -60,18 +60,19 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
               productViews={productViews}
             />
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
+          <div className="bg-white p-6 rounded-lg shadow flex items-center flex-col">
             <h2 className="text-xl font-semibold mb-4">
               Visualizações por Página
             </h2>
             <PageViewsBarChart pageViews={pageViews} />
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-4">
-              Visualizações por Produto
-            </h2>
-            <ProductViews productViews={productViews} />
-          </div>
+        </div>
+
+        <div className="bg-white p-6 mt-8 rounded-lg shadow flex items-center flex-col">
+          <h2 className="text-xl font-semibold mb-4 w-f">
+            Visualizações por Produto
+          </h2>
+          <ProductViews productViews={productViews} />
         </div>
       </div>
     </div>
