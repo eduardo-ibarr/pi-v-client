@@ -67,6 +67,7 @@ function ProtectedRoute() {
 }
 
 export default function App() {
+  console.log("App render");
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />

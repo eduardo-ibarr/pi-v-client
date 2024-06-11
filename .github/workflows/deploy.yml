@@ -1,0 +1,32 @@
+name: Deploy Website
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Install sshpass
+        run: sudo apt-get install -y sshpass
+
+      - name: Clean /var/www/html and Deploy
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+        run: |
+          sshpass -p $DEPLOY_PASS ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST 'bash -s' << 'EOF'
+          cd /home/ubuntu/pi5/pi-v-client
+          git pull origin main
+          npm install
+          npm run build
+          sudo rm -rf /var/www/html/*
+          sudo cp -r dist/* /var/www/html/
+          EOF
