@@ -27,7 +27,7 @@ export default function CreateProductPage() {
     reset,
   } = useForm({});
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     console.log("Form Data:", data);
     const formData = new FormData();
     formData.append("name", data.name);
