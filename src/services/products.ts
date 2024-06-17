@@ -1,6 +1,11 @@
 import { AxiosError } from "axios";
 import { client } from "./client";
-import { CreateProductData, UpdateProductData } from "../models/products";
+import {
+  CreateProductData,
+  ProductsPaginated,
+  QueryListProducts,
+  UpdateProductData,
+} from "../models/products";
 
 export class ProductsServices {
   static async create(data: CreateProductData) {
@@ -14,10 +19,19 @@ export class ProductsServices {
     }
   }
 
-  static async list() {
+  static async list(
+    data: QueryListProducts
+  ): Promise<ProductsPaginated | undefined> {
     try {
-      const response = await client.get("/products");
-      return response.data;
+      let url = `/products?page=${data.page}&limit=${data.limit}`;
+      if (data.sort) {
+        url += `&sort=${data.sort}`;
+      }
+      if (data.search) {
+        url += `&search=${encodeURIComponent(data.search)}`;
+      }
+      const response = await client.get(url);
+      return response.data as ProductsPaginated;
     } catch (error) {
       if (error instanceof AxiosError) {
         throw new Error(error.response?.data.message);
