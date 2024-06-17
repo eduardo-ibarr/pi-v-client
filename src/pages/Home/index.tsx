@@ -1,6 +1,5 @@
 import Carousel from "../../components/Carousel";
 import useListProducts from "../../hooks/products/useListProducts";
-import { Product } from "../../models/products";
 import PromotionalBanner from "../../components/PromotionalBanner";
 import NewArrivalsSection from "../../components/NewArrivalsSection";
 import TrendingStylesSection from "../../components/TrendingStylesSection";
@@ -35,7 +34,9 @@ function HomePage() {
     return <LoadingSpin />;
   }
 
-  const slicedProducts = (data?.items as Product[]).slice(0, 4);
+  console.log(data);
+
+  const slicedProducts = (data?.items || []).slice(0, 4);
 
   return (
     <>
