@@ -5,6 +5,7 @@ export interface Product {
   price: number;
   image_url?: string;
   category_name: string;
+  status: string;
   created_at: Date;
   updated_at: Date;
   deleted_at?: Date;
@@ -23,7 +24,7 @@ export interface CreateProductData {
   description?: string;
   price: number;
   image_url?: string;
-  category_id: number;
+  category_id: string;
 }
 
 export interface UpdateProductData {
@@ -31,8 +32,9 @@ export interface UpdateProductData {
   name?: string;
   description?: string;
   price?: number;
+  status?: string;
   image_url?: string;
-  category_id?: number;
+  category_id?: string;
 }
 
 export interface ProductsPaginated {

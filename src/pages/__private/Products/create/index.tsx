@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
@@ -14,38 +14,38 @@ import {
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import useListCategories from "../../../../hooks/categories/useListProducts";
 import LoadingSpin from "../../../../components/LoadingSpin";
+import { CreateProductData } from "../../../../models/products";
+import useCreateProduct from "../../../../hooks/products/useCreateProduct";
+import { useEffect } from "react";
 
 export default function CreateProductPage() {
   const { data: categories, isLoading } = useListCategories();
+  const { mutateAsync: create, isSuccess } = useCreateProduct();
 
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
     reset,
-  } = useForm({});
+    control,
+  } = useForm<CreateProductData>({});
 
-  const onSubmit = (data: any) => {
-    console.log("Form Data:", data);
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("category", data.category);
-    formData.append("price", data.price);
-    formData.append("description", data.description);
-    formData.append("image", data.image[0]); // Append the file
-
-    // TODO: Send formData to the server
-    alert("Product has been submitted!");
+  const onSubmit = async (data: CreateProductData) => {
+    await create(data);
     reset();
   };
 
   const handleCancel = () => {
-    navigate(-1); // Navigate back to the previous page
+    navigate(-1);
   };
 
-  const imageFile = watch("image"); // Watch the image file input
+  useEffect(() => {
+    if (isSuccess) {
+      alert("Produto cadastrado com sucesso!");
+      navigate("/admin/products");
+    }
+  }, [isSuccess, navigate]);
 
   if (isLoading) {
     return <LoadingSpin />;
@@ -54,8 +54,6 @@ export default function CreateProductPage() {
   if (!categories) {
     return <div>No categories found</div>;
   }
-
-  console.log("Categories:", categories);
 
   return (
     <Card className="m-4">
@@ -87,13 +85,23 @@ export default function CreateProductPage() {
           </div>
 
           <div className="mb-4">
-            <Select label="Selecione uma categoria">
-              {categories.map((category) => (
-                <Option key={category.id} value={String(category.id)}>
-                  {category.name}
-                </Option>
-              ))}
-            </Select>
+            <Controller
+              control={control}
+              name="category_id"
+              render={({ field }) => (
+                <Select
+                  label="Categoria"
+                  error={!!errors.category_id?.message}
+                  {...field}
+                >
+                  {categories.map((category) => (
+                    <Option key={category.id} value={category.id.toString()}>
+                      {category.name}
+                    </Option>
+                  ))}
+                </Select>
+              )}
+            />
           </div>
 
           <div className="mb-4">
@@ -108,6 +116,17 @@ export default function CreateProductPage() {
             />
           </div>
 
+          <div className="mb-4">
+            <Input
+              crossOrigin=""
+              type="text"
+              label="Link da Imagem do Produto"
+              {...register("image_url", {
+                required: "O link da imagem do produto é obrigatório",
+              })}
+            />
+          </div>
+
           <Textarea
             label="Descrição"
             error={!!errors.description?.message}
@@ -115,35 +134,6 @@ export default function CreateProductPage() {
               required: "A descrição do produto é obrigatória",
             })}
           />
-
-          <div className="my-4 max-w-96">
-            <Input
-              crossOrigin=""
-              type="file"
-              label="Imagem do Produto"
-              {...register("image", {
-                required: "A imagem do produto é obrigatória",
-              })}
-              accept="image/*"
-              // error={errors.image && "A imagem do produto é obrigatória"}
-            />
-            {imageFile && imageFile[0] && (
-              <div className="p-2">
-                <img
-                  src={URL.createObjectURL(imageFile[0])}
-                  alt="Preview"
-                  className="w-32 h-32 mt-2 rounded-md object-cover shadow-md"
-                  onLoad={() =>
-                    URL.revokeObjectURL(URL.createObjectURL(imageFile[0]))
-                  }
-                />
-
-                <Typography color="gray" className="mt-2 text-sm">
-                  {imageFile[0].name}
-                </Typography>
-              </div>
-            )}
-          </div>
 
           <div className="flex justify-end gap-4 mt-4">
             <Button variant="outlined" onClick={handleCancel}>

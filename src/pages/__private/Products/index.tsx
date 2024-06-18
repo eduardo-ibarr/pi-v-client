@@ -177,15 +177,7 @@ export default function AdminProductsPage() {
         <tbody>
           {productsData.items.map(
             (
-              {
-                category_name,
-                name,
-                price,
-                is_active,
-                image_url,
-                created_at,
-                id,
-              },
+              { category_name, name, price, image_url, created_at, status, id },
               index
             ) => {
               const isLast = index === productsData.items.length - 1;
@@ -233,8 +225,11 @@ export default function AdminProductsPage() {
                     <Chip
                       variant="ghost"
                       size="sm"
-                      value={is_active ? "Ativo" : "Inativo"}
-                      color={is_active ? "green" : "blue-gray"}
+                      className="items-center justify-center w-28"
+                      value={
+                        status === "available" ? "Disponível" : "Reservado"
+                      }
+                      color={status === "available" ? "green" : "blue-gray"}
                     />
                   </td>
                   <td className={classes}>
