@@ -4,11 +4,19 @@ export interface Product {
   description?: string;
   price: number;
   image_url?: string;
-  category_id: number;
+  category_name: string;
+  status: string;
   created_at: Date;
   updated_at: Date;
   deleted_at?: Date;
   is_active: boolean;
+}
+
+export interface QueryListProducts {
+  page?: number;
+  limit?: number;
+  sort?: string;
+  search?: string;
 }
 
 export interface CreateProductData {
@@ -16,7 +24,7 @@ export interface CreateProductData {
   description?: string;
   price: number;
   image_url?: string;
-  category_id: number;
+  category_id: string;
 }
 
 export interface UpdateProductData {
@@ -24,6 +32,15 @@ export interface UpdateProductData {
   name?: string;
   description?: string;
   price?: number;
+  status?: string;
   image_url?: string;
-  category_id?: number;
+  category_id?: string;
+}
+
+export interface ProductsPaginated {
+  page: number;
+  limit: number;
+  totalPages: number;
+  totalItems: number;
+  items: Product[];
 }

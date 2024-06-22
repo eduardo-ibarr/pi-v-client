@@ -10,7 +10,6 @@ import {
   Option,
 } from "@material-tailwind/react";
 import { RegisterData } from "../../models/users";
-import moment from "moment";
 import { useNavigate } from "react-router-dom";
 
 type FormValues = RegisterData;
@@ -76,8 +75,6 @@ export default function RegisterPage() {
         phone: data.phone,
         email: data.email,
         password: data.password,
-        address: data.address,
-        birth_date: moment(data.birth_date).format("YYYY-MM-DD HH:mm:ss"),
         gender: gender[data.gender],
         role: "user",
       });
@@ -88,9 +85,9 @@ export default function RegisterPage() {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50 p-10">
-      <div className="bg-white p-8 rounded-md shadow-md w-full max-w-lg">
+      <div className="bg-white p-4 rounded-md shadow-md w-full max-w-lg">
         <Typography variant="h3" className="text-center mb-6 text-gray-900">
-          Cadastro
+          Cadastre-se
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="flex flex-col w-full">
@@ -152,38 +149,6 @@ export default function RegisterPage() {
             {errors.password && (
               <Typography variant="small" color="red" className="mt-1">
                 {errors.password.message}
-              </Typography>
-            )}
-          </div>
-          <div className="flex flex-col w-full">
-            <Input
-              crossOrigin={"anonymous"}
-              label="Endereço"
-              {...register("address", { required: "Endereço é obrigatório" })}
-              error={!!errors.address}
-              className="border p-2 rounded mt-1"
-              placeholder="Seu endereço"
-            />
-            {errors.address && (
-              <Typography variant="small" color="red" className="mt-1">
-                {errors.address.message}
-              </Typography>
-            )}
-          </div>
-          <div className="flex flex-col w-full">
-            <Input
-              crossOrigin={"anonymous"}
-              label="Data de Nascimento"
-              type="date"
-              {...register("birth_date", {
-                required: "Data de nascimento é obrigatória",
-              })}
-              error={!!errors.birth_date}
-              className="border p-2 rounded mt-1"
-            />
-            {errors.birth_date && (
-              <Typography variant="small" color="red" className="mt-1">
-                {errors.birth_date.message}
               </Typography>
             )}
           </div>

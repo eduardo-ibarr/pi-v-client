@@ -117,7 +117,7 @@ function LoginPage() {
             type="submit"
             disabled={loading}
             fullWidth
-            className="my-4 bg-gray-800"
+            className=" bg-gray-800"
           >
             {loading ? "Entrando..." : "Entrar"}
           </Button>

@@ -13,9 +13,12 @@ import ForgotPassword from "./pages/ForgotPassword";
 import useTokenData from "./hooks/app/useTokenData";
 import DashboardPage from "./pages/__private/Dashboard";
 import ProductsPage from "./pages/__private/Products";
-import ProductDetails from "./pages/ProductDetails"; // Adicione a importação do ProductDetails
+import ProductDetailsAdminPage from "./pages/__private/Products/show";
+import ProductDetails from "./pages/ProductDetails";
 import Layout from "./styles/Layout";
 import Logout from "./pages/Logout";
+import CreateProductPage from "./pages/__private/Products/create";
+import AdminLayout from "./styles/AdminLayout";
 
 const queryClient = new QueryClient();
 
@@ -31,7 +34,7 @@ const router = createBrowserRouter([
             <HomePage />
           </Layout>
         ),
-      }, // Rota principal da home
+      },
       { path: "login", element: <LoginPage /> },
       { path: "logout", element: <Logout /> },
       { path: "register", element: <RegisterPage /> },
@@ -40,8 +43,39 @@ const router = createBrowserRouter([
         path: "admin",
         element: <ProtectedRoute />,
         children: [
-          { path: "dashboard", element: <DashboardPage userName="" /> },
-          { path: "products", element: <ProductsPage /> },
+          {
+            path: "dashboard",
+            element: (
+              <AdminLayout pageName="Dashboard">
+                <DashboardPage userName="" />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: "products",
+            element: (
+              <AdminLayout pageName="Página de Produtos">
+                <ProductsPage />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: "products/:productId",
+            element: (
+              <AdminLayout pageName="Detalhes do Produto">
+                <ProductDetailsAdminPage />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: "products/new",
+            element: (
+              <AdminLayout pageName="Novo Produto">
+                <CreateProductPage />
+              </AdminLayout>
+            ),
+          },
+          { path: "categories", element: <p>Categories</p> },
           { path: "orders", element: <p>Orders</p> },
           { path: "users", element: <p>Users</p> },
         ],
@@ -67,6 +101,7 @@ function ProtectedRoute() {
 }
 
 export default function App() {
+  console.log("App render");
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />

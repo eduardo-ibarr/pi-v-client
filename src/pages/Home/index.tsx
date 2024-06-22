@@ -1,39 +1,26 @@
 import Carousel from "../../components/Carousel";
 import useListProducts from "../../hooks/products/useListProducts";
-import { Product } from "../../models/products";
 import PromotionalBanner from "../../components/PromotionalBanner";
 import NewArrivalsSection from "../../components/NewArrivalsSection";
-import FeaturedBrandsSection from "../../components/FeaturedBrandsSection";
-import SocialProofSection from "../../components/SocialProofSection";
 import TrendingStylesSection from "../../components/TrendingStylesSection";
-import { Review } from "../../components/SocialProofSection";
 import { FaInstagram } from "react-icons/fa";
 import useFeed from "../../hooks/instagram/useFeed";
 import useSendPageViewTrack from "../../hooks/trackings/useSendPageViewTrack";
 import { useEffect } from "react";
 import { Typography } from "@material-tailwind/react";
+import LoadingSpin from "../../components/LoadingSpin";
 
 function HomePage() {
-  const { data, isLoading } = useListProducts();
+  const { data, isLoading } = useListProducts({
+    limit: 10,
+    page: 1,
+    sort: "created_at:desc",
+    search: "",
+  });
 
   const { mutateAsync: sendTrack } = useSendPageViewTrack();
 
   const imagesFeed = useFeed();
-
-  const reviews: Review[] = [
-    {
-      author: "Maria Silva",
-      comment: "Adorei as roupas! Ótima qualidade e entrega rápida.",
-    },
-    {
-      author: "João Santos",
-      comment: "Recomendo! Preços justos e atendimento excelente.",
-    },
-    {
-      author: "Maria do Carmo",
-      comment: "Comprei um tênis e chegou em perfeito estado. Amei!",
-    },
-  ];
 
   useEffect(() => {
     sendTrack({
@@ -44,10 +31,12 @@ function HomePage() {
   }, [sendTrack]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingSpin />;
   }
 
-  const slicedProducts = (data as Product[]).slice(0, 4);
+  console.log(data);
+
+  const slicedProducts = (data?.items || []).slice(0, 4);
 
   return (
     <>
@@ -58,8 +47,6 @@ function HomePage() {
         </div>
         <NewArrivalsSection products={slicedProducts} />
         <TrendingStylesSection products={slicedProducts} />
-        <FeaturedBrandsSection brands={["Nike", "Adidas", "Levi's", "Gucci"]} />
-        <SocialProofSection reviews={reviews} />
         <div className="mt-8 flex justify-center items-center">
           <a
             href="https://www.instagram.com/brechocomunitariosantiago/"

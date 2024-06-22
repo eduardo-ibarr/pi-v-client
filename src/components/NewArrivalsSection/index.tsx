@@ -16,7 +16,7 @@ const NewArrivalsSection: React.FC<NewArrivalsSectionProps> = ({
         Novidades
       </Typography>
       <div className="flex justify-center gap-12">
-        {products.slice(0, 3).map((product) => (
+        {[products[0], products[1]].map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>

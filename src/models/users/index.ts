@@ -3,8 +3,6 @@ export interface RegisterData {
   email: string;
   password: string;
   phone: string;
-  address: string;
-  birth_date: string;
   gender: string;
   role: string;
 }

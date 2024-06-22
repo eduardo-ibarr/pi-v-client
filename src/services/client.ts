@@ -2,7 +2,7 @@ import axios from "axios";
 import { getAccessToken } from "../utils/auth";
 
 export const client = axios.create({
-  baseURL: "http://34.229.218.222:3333",
+  baseURL: import.meta.env.VITE_API_URL as string,
   headers: {
     "Content-Type": "application/json",
   },

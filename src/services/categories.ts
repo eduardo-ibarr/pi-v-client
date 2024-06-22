@@ -1,6 +1,10 @@
 import { AxiosError } from "axios";
 import { client } from "./client";
-import { UpdateCategoryData, CreateCategoryData } from "../models/categories";
+import {
+  UpdateCategoryData,
+  CreateCategoryData,
+  Category,
+} from "../models/categories";
 
 export class CategoriesServices {
   static async create(data: CreateCategoryData) {
@@ -14,7 +18,7 @@ export class CategoriesServices {
     }
   }
 
-  static async list() {
+  static async list(): Promise<Category[] | undefined> {
     try {
       const response = await client.get("/categories");
       return response.data;
