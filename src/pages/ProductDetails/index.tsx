@@ -1,15 +1,24 @@
 import { useParams, Link } from "react-router-dom";
 import { Typography, Button, Breadcrumbs } from "@material-tailwind/react";
+import { BsFillCartPlusFill } from "react-icons/bs";
+import { useEffect, useState } from "react";
 import useShowProduct from "../../hooks/products/useShowProduct";
 import { formatPrice } from "../../utils/format";
-import { BsFillCartPlusFill } from "react-icons/bs";
-import { useEffect } from "react";
 import useSendProductViewTrack from "../../hooks/trackings/useSendProductViewTrack";
+import ProductReview from "./ProductReview"; // Certifique-se de criar este componente
+
+// Definir os tipos
+type ProductParams = {
+  productId: string;
+};
 
 function ProductDetails() {
-  const { productId } = useParams();
+  const { productId } = useParams<ProductParams>();
   const { data: product, isLoading } = useShowProduct(productId || "");
   const { mutateAsync: sendTrack } = useSendProductViewTrack();
+  const [isReserved, setIsReserved] = useState(false);
+  const [isReviewEnabled, setIsReviewEnabled] = useState(false);
+  const [isApproved, setIsApproved] = useState(false);
 
   useEffect(() => {
     sendTrack({
@@ -18,6 +27,20 @@ function ProductDetails() {
       user_id: null,
     });
   }, [productId, sendTrack]);
+
+  const handleReserve = () => {
+    setIsReserved(true);
+    // Simular a lógica do admin aprovando/rejeitando a compra
+    setTimeout(() => {
+      setIsReserved(false);
+    }, 86400000); // 24 horas
+  };
+
+  // Função simulada para aprovação pelo admin
+  const handleAdminApproval = () => {
+    setIsApproved(true);
+    setIsReviewEnabled(true);
+  };
 
   if (isLoading) {
     return <div>Carregando...</div>;
@@ -51,9 +74,25 @@ function ProductDetails() {
           </Typography>
           <Typography className="mb-4">{product.description}</Typography>
 
-          <Button className="text-white font-bold py-3 px-4 rounded flex items-center">
+          <Button
+            className="text-white font-bold py-3 px-4 rounded flex items-center"
+            disabled={isReserved || isApproved}
+            onClick={handleReserve}
+          >
             <BsFillCartPlusFill className="mr-2" /> Reservar este item
           </Button>
+
+          {/* Simular botões de admin para aprovação/rejeição */}
+          <div className="mt-4">
+            <Button color="green" onClick={handleAdminApproval}>
+              Aprovar
+            </Button>
+            <Button color="red" onClick={() => setIsReserved(false)}>
+              Rejeitar
+            </Button>
+          </div>
+
+          {isReviewEnabled && <ProductReview productId={Number(productId)} />}
         </div>
       </div>
     </div>

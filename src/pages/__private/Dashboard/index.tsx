@@ -11,6 +11,7 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
+import PendingPurchases from "./components/PendingPurchases";
 import useListPageViews from "../../../hooks/trackings/useListPageViews";
 import useListProductViews from "../../../hooks/trackings/useListProductViews";
 import PageViewsBarChart from "./components/PageViewsBarChart";
@@ -35,8 +36,7 @@ Chart.register(
 
 const AdminDashboard: React.FC<AdminDashboardProps> = () => {
   const { data: pageViews, isLoading: isLoadingPageViews } = useListPageViews();
-  const { data: productViews, isLoading: isLoadingProductViews } =
-    useListProductViews();
+  const { data: productViews, isLoading: isLoadingProductViews } = useListProductViews();
 
   if (isLoadingPageViews || isLoadingProductViews) {
     return <div>Loading...</div>;
@@ -50,27 +50,23 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
     <div className="m-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         <div className="bg-white p-6 rounded-lg shadow flex items-center flex-col">
-          <h2 className="text-xl font-semibold mb-4">
-            Linha do Tempo de Visualizações
-          </h2>
-          <PageAndProductLineChart
-            pageViews={pageViews}
-            productViews={productViews}
-          />
+          <h2 className="text-xl font-semibold mb-4">Linha do Tempo de Visualizações</h2>
+          <PageAndProductLineChart pageViews={pageViews} productViews={productViews} />
         </div>
         <div className="bg-white p-6 rounded-lg shadow flex items-center flex-col">
-          <h2 className="text-xl font-semibold mb-4">
-            Visualizações por Página
-          </h2>
+          <h2 className="text-xl font-semibold mb-4">Visualizações por Página</h2>
           <PageViewsBarChart pageViews={pageViews} />
         </div>
       </div>
 
       <div className="bg-white p-6 mt-8 rounded-lg shadow flex items-center flex-col">
-        <h2 className="text-xl font-semibold mb-4 w-f">
-          Visualizações por Produto
-        </h2>
+        <h2 className="text-xl font-semibold mb-4 w-f">Visualizações por Produto</h2>
         <ProductViews productViews={productViews} />
+      </div>
+
+      {/* Novo componente para gerenciar compras pendentes */}
+      <div className="bg-white p-6 mt-8 rounded-lg shadow flex items-center flex-col">
+        <PendingPurchases />
       </div>
     </div>
   );
