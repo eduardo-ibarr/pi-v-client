@@ -16,6 +16,8 @@ import useListProductViews from "../../../hooks/trackings/useListProductViews";
 import PageViewsBarChart from "./components/PageViewsBarChart";
 import PageAndProductLineChart from "./components/PageAndProductLineChart";
 import ProductViews from "./components/ProductViews";
+import jsPDF from "jspdf";
+import { Button } from "@material-tailwind/react";
 
 interface AdminDashboardProps {
   userName: string;
@@ -46,6 +48,45 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
     return <div>Error</div>;
   }
 
+  const handleGeneratePDF = () => {
+    const doc = new jsPDF();
+    let currentYPosition = 10;
+
+    const countPages = pageViews.reduce((acc, pageView) => {
+      acc[pageView.url] = (acc[pageView.url] || 0) + 1;
+      return acc;
+    }, {});
+
+    const countProducts = productViews.reduce((acc, productView) => {
+      acc[productView.product_name] = (acc[productView.product_name] || 0) + 1;
+      return acc;
+    }, {});
+
+    const pageViewsString = Object.entries(countPages).reduce(
+      (acc, [url, count]) => `${acc}${url}: ${count}\n`,
+      ""
+    );
+
+    const productViewsString = Object.entries(countProducts).reduce(
+      (acc, [product, count]) => `${acc}${product}: ${count}\n`,
+      ""
+    );
+
+    doc.text("Relatório de Visualizações", 10, currentYPosition);
+    currentYPosition += 10;
+
+    doc.text("Contagem de Páginas por Visualização:", 10, currentYPosition);
+    currentYPosition += 10;
+    doc.text(pageViewsString, 10, currentYPosition);
+    currentYPosition += 40;
+
+    doc.text("Contagem de Produtos por Visualização:", 10, currentYPosition);
+    currentYPosition += 10;
+    doc.text(productViewsString, 10, currentYPosition);
+
+    doc.save("relatorio.pdf");
+  };
+
   return (
     <div className="m-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
@@ -72,6 +113,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
         </h2>
         <ProductViews productViews={productViews} />
       </div>
+
+      <Button onClick={handleGeneratePDF} className="mt-4">
+        Gerar relatório em PDF
+      </Button>
     </div>
   );
 };
