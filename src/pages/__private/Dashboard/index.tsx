@@ -52,12 +52,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = () => {
     const doc = new jsPDF();
     let currentYPosition = 10;
 
-    const countPages = pageViews.reduce((acc, pageView) => {
+    const countPages = pageViews.reduce((acc: any, pageView) => {
       acc[pageView.url] = (acc[pageView.url] || 0) + 1;
       return acc;
     }, {});
 
-    const countProducts = productViews.reduce((acc, productView) => {
+    const countProducts = productViews.reduce((acc: any, productView) => {
       acc[productView.product_name] = (acc[productView.product_name] || 0) + 1;
       return acc;
     }, {});

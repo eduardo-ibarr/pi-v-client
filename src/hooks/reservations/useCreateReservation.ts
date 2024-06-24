@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import { CategoriesServices } from "../../services/categories";
+import { ReservationsServices } from "../../services/reservations";
 
-export default function useCreateCategory() {
+export default function useCreateReservation() {
   return useMutation({
-    mutationFn: CategoriesServices.create,
+    mutationFn: ReservationsServices.create,
   });
 }

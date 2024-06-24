@@ -1,5 +1,4 @@
-import { useState, useCallback } from "react";
-import { debounce } from "lodash";
+import { useState } from "react";
 import useListUsers from "../../../hooks/users/useListUsers";
 import LoadingSpin from "../../../components/LoadingSpin";
 import { PencilIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
@@ -14,8 +13,6 @@ const TABLE_HEAD = [
   { label: "Data de Criação", sortKey: "created_at" },
   { label: "", sortKey: null },
 ];
-
-const ITEMS_PER_PAGE = [3, 5, 10, 15, 20];
 
 export default function AdminUsersPage() {
   const [queryParams, setQueryParams] = useState({
@@ -36,51 +33,6 @@ export default function AdminUsersPage() {
       ...prev,
       sortDirection,
       sort: `${newSort}:${sortDirection}`,
-    }));
-  };
-
-  const debouncedSearch = useCallback(
-    debounce((newSearch) => {
-      setQueryParams((prev) => ({
-        ...prev,
-        search: newSearch,
-        page: 1,
-      }));
-    }, 1000),
-    []
-  );
-
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    debouncedSearch(event.target.value);
-  };
-
-  const handleSeeAll = () => {
-    setQueryParams((prev) => ({
-      ...prev,
-      search: "",
-      page: 1,
-    }));
-  };
-
-  const handleNextPage = () => {
-    setQueryParams((prev) => ({
-      ...prev,
-      page: prev.page + 1,
-    }));
-  };
-
-  const handlePreviousPage = () => {
-    setQueryParams((prev) => ({
-      ...prev,
-      page: Math.max(prev.page - 1, 1),
-    }));
-  };
-
-  const handleLimitChange = (value: string | undefined) => {
-    setQueryParams((prev) => ({
-      ...prev,
-      limit: parseInt(value ? value : "", 10),
-      page: 1,
     }));
   };
 

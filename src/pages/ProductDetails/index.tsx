@@ -5,7 +5,7 @@ import { formatPrice } from "../../utils/format";
 import { BsFillCartPlusFill } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import useSendProductViewTrack from "../../hooks/trackings/useSendProductViewTrack";
-import useCreateReservation from "../../hooks/categories/useCreateCategory";
+import useCreateReservation from "../../hooks/reservations/useCreateReservation";
 import useTokenData from "../../hooks/app/useTokenData";
 
 function ProductDetails() {
