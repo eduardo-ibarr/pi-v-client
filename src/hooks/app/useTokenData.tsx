@@ -4,6 +4,7 @@ import { getAccessToken } from "../../utils/auth";
 export interface TokenData {
   email: string;
   role: string;
+  id: number;
 }
 
 export default function useTokenData(): TokenData | null {

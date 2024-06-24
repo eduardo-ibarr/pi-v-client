@@ -33,7 +33,6 @@ export default function AdminSidebar({ pageName }: Props) {
           onClick={() => navigate("/admin/users")}
         />
         <SidebarItem
-          disabled
           label="Reservas"
           onClick={() => navigate("/admin/reservations")}
         />

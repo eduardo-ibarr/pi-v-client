@@ -21,6 +21,8 @@ import ProductDetailsAdminPage from "./pages/__private/Products/show";
 import AdminUsersPage from "./pages/__private/Users";
 import UserDetailsAdminPage from "./pages/__private/Users/show";
 import AdminLayout from "./styles/AdminLayout";
+import AdminReservationsPage from "./pages/__private/Reservations";
+import ReservationDetailsAdminPage from "./pages/__private/Reservations/show";
 import Layout from "./styles/Layout";
 import AdminProductsPage from "./pages/__private/Products";
 import AdminDashboard from "./pages/__private/Dashboard";
@@ -89,6 +91,22 @@ const router = createBrowserRouter([
             ),
           },
           {
+            path: "reservations",
+            element: (
+              <AdminLayout pageName="Reservas">
+                <AdminReservationsPage />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: "reservations/:reservationId",
+            element: (
+              <AdminLayout pageName="Detalhes da Reserva">
+                <ReservationDetailsAdminPage />
+              </AdminLayout>
+            ),
+          },
+          {
             path: "products/:productId",
             element: (
               <AdminLayout pageName="Detalhes do Produto">
@@ -139,13 +157,12 @@ const router = createBrowserRouter([
 
 function ProtectedRoute() {
   const tokenData = useTokenData();
-  const hasAccess = Boolean(tokenData);
+  const hasAccess = tokenData?.role === "admin";
 
   return <div>{hasAccess ? <Outlet /> : <Navigate to="/login" />}</div>;
 }
 
 export default function App() {
-  console.log("App render");
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
