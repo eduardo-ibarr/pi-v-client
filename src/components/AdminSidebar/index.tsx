@@ -25,7 +25,10 @@ export default function AdminSidebar({ pageName }: Props) {
           onClick={() => navigate("/admin/products")}
         />
         <SidebarItem
-          disabled
+          label="Categorias"
+          onClick={() => navigate("/admin/categories")}
+        />
+        <SidebarItem
           label="Usuários"
           onClick={() => navigate("/admin/users")}
         />

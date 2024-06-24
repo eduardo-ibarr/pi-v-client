@@ -7,71 +7,62 @@ import {
   DialogBody,
   DialogFooter,
   Input,
+  Textarea,
   Card,
   CardBody,
   IconButton,
-  Select,
-  Option,
 } from "@material-tailwind/react";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import { useForm, Controller } from "react-hook-form";
+import useShowCategory from "../../../../hooks/categories/useShowCategory";
 import LoadingSpin from "../../../../components/LoadingSpin";
-import useShowUser from "../../../../hooks/users/useShowUser";
-import useUpdateUser from "../../../../hooks/users/useUpdateUser";
-import useDeleteUser from "../../../../hooks/users/useDeleteUser";
-import { UpdateProfileData } from "../../../../models/users";
+import { UpdateCategoryData } from "../../../../models/categories";
+import { useForm } from "react-hook-form";
+import useUpdateCategory from "../../../../hooks/categories/useUpdateCategory";
+import useDeleteCategory from "../../../../hooks/categories/useDeleteCategory";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import useListCategories from "../../../../hooks/categories/useListCategories";
 
-const options = [
-  { id: 1, name: "user", label: "Usuário" },
-  { id: 2, name: "admin", label: "Administrador" },
-];
-
-function UserDetailsAdminPage() {
-  const { userId } = useParams();
+function CategoryDetailsAdminPage() {
+  const { categoryId } = useParams();
   const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     reset,
-    control,
     formState: { errors },
-  } = useForm<UpdateProfileData>({
+  } = useForm<UpdateCategoryData>({
     defaultValues: {
-      email: "",
       name: "",
-      phone: "",
-      role: "",
+      description: "",
     },
   });
 
-  const { mutateAsync: update, isSuccess: isSuccessUpdate } = useUpdateUser();
-  const { mutateAsync: deleteUser, isSuccess: isSuccessDelete } =
-    useDeleteUser();
-  const { data, isLoading, isError, error } = useShowUser(
-    parseInt(userId || "")
-  );
+  const { mutateAsync: update, isSuccess: isSuccessUpdate } =
+    useUpdateCategory();
+  const { mutateAsync: deleteCategory, isSuccess: isSuccessDelete } =
+    useDeleteCategory();
+  const { data, isLoading, isError, error } = useShowCategory(categoryId || "");
+  const { data: categories } = useListCategories();
 
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
 
   const handleDelete = async () => {
-    await deleteUser(userId || "");
+    await deleteCategory(categoryId || "");
     setOpenDelete(false);
   };
 
   useEffect(() => {
     if (data) {
       reset({
+        id: data.id,
         name: data.name,
-        email: data.email,
-        phone: data.phone,
-        role: data.role,
+        description: data.description,
       });
     }
   }, [data, reset]);
 
-  const onSubmit = async (formData: UpdateProfileData) => {
+  const onSubmit = async (formData: UpdateCategoryData) => {
     try {
       await update(formData);
       setOpen(false);
@@ -82,20 +73,23 @@ function UserDetailsAdminPage() {
 
   useEffect(() => {
     if (isSuccessUpdate) {
-      alert("Usuário atualizado com sucesso!");
+      alert("Categoria atualizada com sucesso!");
     }
 
     if (isSuccessDelete) {
-      alert("Usuário excluído com sucesso!");
+      alert("Categoria excluída com sucesso!");
       navigate(-1);
     }
   }, [isSuccessUpdate, isSuccessDelete, navigate]);
 
   if (isLoading) return <LoadingSpin />;
   if (isError)
-    return <div>Error: {error?.message || "Failed to fetch User details"}</div>;
+    return (
+      <div>Error: {error?.message || "Failed to fetch Category details"}</div>
+    );
 
-  if (!data) return <div>No User found</div>;
+  if (!data) return <div>No Category found</div>;
+  if (!categories) return <div>No categories found</div>;
 
   const handleCancel = () => {
     navigate(-1);
@@ -111,15 +105,15 @@ function UserDetailsAdminPage() {
                 <ArrowLeftIcon className="h-5 w-5" />
               </IconButton>
               <Typography variant="h5" className="ml-2 text-black">
-                Detalhes do Usuário
+                Detalhes da Categoria
               </Typography>
             </div>
 
             <Typography color="gray" className="mt-2">
-              Informações detalhadas do usuário.
+              Informações detalhadas do Categoria.
             </Typography>
 
-            <div className="mt-6">
+            <div className="mt-8">
               <Typography
                 variant="h5"
                 color="blue-gray"
@@ -127,16 +121,14 @@ function UserDetailsAdminPage() {
               >
                 {data.name}
               </Typography>
-              <Typography color="blue-gray">Telefone: {data.phone}</Typography>
-              <Typography color="blue-gray">Email: {data.email}</Typography>
-              <Typography color="blue-gray">
-                Função: {data.role === "admin" ? "Administrador" : "Usuário"}
+              <Typography color="blue-gray" className="mb-4">
+                {data.description}
               </Typography>
-              <Typography color="blue-gray">
-                Criado em: {new Date(data.created_at).toLocaleDateString()}
+              <Typography variant="h6" color="gray" className="mb-2">
+                Criado em: {new Date(data.created_at).toLocaleString()}
               </Typography>
-              <Typography color="blue-gray">
-                Atualizado em: {new Date(data.updated_at).toLocaleDateString()}
+              <Typography variant="h6" color="gray">
+                Atualizado em: {new Date(data.updated_at).toLocaleString()}
               </Typography>
             </div>
           </div>
@@ -144,7 +136,7 @@ function UserDetailsAdminPage() {
           <div className="flex justify-end space-x-4">
             <Button onClick={() => setOpen(true)}>Editar Informações</Button>
             <Button variant="outlined" onClick={() => setOpenDelete(true)}>
-              Excluir usuário
+              Excluir Categoria
             </Button>
           </div>
         </CardBody>
@@ -163,7 +155,7 @@ function UserDetailsAdminPage() {
           >
             <DialogBody className="p-6">
               <Typography variant="h5" color="gray" className="mb-6">
-                Edição de Informações do Usuário
+                Edição de Informações da Categoria
               </Typography>
 
               <div className="mb-4">
@@ -176,39 +168,13 @@ function UserDetailsAdminPage() {
                 />
               </div>
 
-              <div className="mb-4 flex space-x-6">
-                <Controller
-                  control={control}
-                  name="role"
-                  render={({ field }) => (
-                    <Select label="Função" {...field}>
-                      {options.map((status) => (
-                        <Option key={status.id} value={status.name}>
-                          {status.label}
-                        </Option>
-                      ))}
-                    </Select>
-                  )}
-                />
-              </div>
-
-              <div className="mb-4">
-                <Input
-                  crossOrigin=""
-                  type="email"
-                  label="Email"
-                  {...register("email", { required: "Email é obrigatório" })}
-                  error={!!errors.email?.message}
-                />
-              </div>
-
-              <div className="mb-4">
-                <Input
-                  crossOrigin=""
-                  type="text"
-                  label="Telefone"
-                  {...register("phone", { required: "Telefone é obrigatório" })}
-                  error={!!errors.phone?.message}
+              <div className="mb-2">
+                <Textarea
+                  label="Descrição"
+                  {...register("description", {
+                    required: "Descrição é obrigatória",
+                  })}
+                  error={!!errors.description?.message}
                 />
               </div>
             </DialogBody>
@@ -232,7 +198,7 @@ function UserDetailsAdminPage() {
         >
           <DialogBody className="p-6 flex justify-center items-center h-full">
             <Typography variant="h5" color="black" className="mt-6">
-              Você tem certeza que deseja excluir este usuário?
+              Você tem certeza que deseja excluir esta categoria?
             </Typography>
           </DialogBody>
 
@@ -248,4 +214,4 @@ function UserDetailsAdminPage() {
   );
 }
 
-export default UserDetailsAdminPage;
+export default CategoryDetailsAdminPage;
