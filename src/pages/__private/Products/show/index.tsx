@@ -23,7 +23,7 @@ import { Controller, useForm } from "react-hook-form";
 import useUpdateProduct from "../../../../hooks/products/useUpdateProduct";
 import useDeleteProduct from "../../../../hooks/products/useDeleteProduct";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import useListCategories from "../../../../hooks/categories/useListProducts";
+import useListCategories from "../../../../hooks/categories/useListCategories";
 
 const options = [
   { id: 1, name: "available", label: "Disponível" },

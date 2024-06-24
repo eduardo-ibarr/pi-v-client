@@ -1,26 +1,29 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   RouterProvider,
   createBrowserRouter,
   Navigate,
   Outlet,
 } from "react-router-dom";
+import useTokenData from "./hooks/app/useTokenData";
+import ForgotPassword from "./pages/ForgotPassword";
 import HomePage from "./pages/Home";
 import LoginPage from "./pages/Login";
-import PageNotFound from "./pages/PageNotFound";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import RegisterPage from "./pages/Register";
-import ForgotPassword from "./pages/ForgotPassword";
-import useTokenData from "./hooks/app/useTokenData";
-import DashboardPage from "./pages/__private/Dashboard";
-import ProductsPage from "./pages/__private/Products";
-import ProductDetailsAdminPage from "./pages/__private/Products/show";
-import ProductDetails from "./pages/ProductDetails";
-import Layout from "./styles/Layout";
 import Logout from "./pages/Logout";
+import PageNotFound from "./pages/PageNotFound";
+import ProductDetails from "./pages/ProductDetails";
+import RegisterPage from "./pages/Register";
+import AdminCategoriesPage from "./pages/__private/Categories";
+import CreateCategoryPage from "./pages/__private/Categories/create";
+import CategoryDetailsAdminPage from "./pages/__private/Categories/show";
 import CreateProductPage from "./pages/__private/Products/create";
-import AdminLayout from "./styles/AdminLayout";
+import ProductDetailsAdminPage from "./pages/__private/Products/show";
 import AdminUsersPage from "./pages/__private/Users";
 import UserDetailsAdminPage from "./pages/__private/Users/show";
+import AdminLayout from "./styles/AdminLayout";
+import Layout from "./styles/Layout";
+import AdminProductsPage from "./pages/__private/Products";
+import AdminDashboard from "./pages/__private/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -49,7 +52,31 @@ const router = createBrowserRouter([
             path: "dashboard",
             element: (
               <AdminLayout pageName="Dashboard">
-                <DashboardPage userName="" />
+                <AdminDashboard userName="" />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: "categories",
+            element: (
+              <AdminLayout pageName="Página de Categorias">
+                <AdminCategoriesPage />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: "categories/:categoryId",
+            element: (
+              <AdminLayout pageName="Detalhes da Categoria">
+                <CategoryDetailsAdminPage />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: "categories/new",
+            element: (
+              <AdminLayout pageName="Nova Categoria">
+                <CreateCategoryPage />
               </AdminLayout>
             ),
           },
@@ -57,7 +84,7 @@ const router = createBrowserRouter([
             path: "products",
             element: (
               <AdminLayout pageName="Página de Produtos">
-                <ProductsPage />
+                <AdminProductsPage />
               </AdminLayout>
             ),
           },
