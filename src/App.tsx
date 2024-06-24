@@ -19,6 +19,8 @@ import Layout from "./styles/Layout";
 import Logout from "./pages/Logout";
 import CreateProductPage from "./pages/__private/Products/create";
 import AdminLayout from "./styles/AdminLayout";
+import AdminUsersPage from "./pages/__private/Users";
+import UserDetailsAdminPage from "./pages/__private/Users/show";
 
 const queryClient = new QueryClient();
 
@@ -77,7 +79,22 @@ const router = createBrowserRouter([
           },
           { path: "categories", element: <p>Categories</p> },
           { path: "orders", element: <p>Orders</p> },
-          { path: "users", element: <p>Users</p> },
+          {
+            path: "users",
+            element: (
+              <AdminLayout pageName="Usuários">
+                <AdminUsersPage />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: "users/:userId",
+            element: (
+              <AdminLayout pageName="Detalhes do Usuário">
+                <UserDetailsAdminPage />
+              </AdminLayout>
+            ),
+          },
         ],
       },
       {

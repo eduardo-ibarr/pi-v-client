@@ -5,6 +5,7 @@ import {
   UpdatePasswordData,
   ForgotPasswordData,
   ResetPasswordData,
+  User,
 } from "../models/users";
 import { client } from "./client";
 
@@ -20,10 +21,21 @@ export class UsersServices {
     }
   }
 
-  static async getProfile() {
+  static async getById(id: number) {
+    try {
+      const response = await client.get(`/users/${id}`);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data.message);
+      }
+    }
+  }
+
+  static async list() {
     try {
       const response = await client.get("/users");
-      return response.data;
+      return response.data as User[];
     } catch (error) {
       if (error instanceof AxiosError) {
         throw new Error(error.response?.data.message);
