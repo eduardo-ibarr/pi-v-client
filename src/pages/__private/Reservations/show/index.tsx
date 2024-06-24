@@ -6,32 +6,22 @@ import {
   Dialog,
   DialogBody,
   DialogFooter,
-  Input,
-  Textarea,
   Card,
   CardBody,
   IconButton,
-  Chip,
-  Select,
-  Option,
+  Input,
 } from "@material-tailwind/react";
-import useShowProduct from "../../../../hooks/products/useShowProduct";
+import useShowReservation from "../../../../hooks/reservations/useShowReservation";
 import LoadingSpin from "../../../../components/LoadingSpin";
-import { formatPrice } from "../../../../utils/format";
-import { UpdateProductData } from "../../../../models/products";
-import { Controller, useForm } from "react-hook-form";
-import useUpdateProduct from "../../../../hooks/products/useUpdateProduct";
-import useDeleteProduct from "../../../../hooks/products/useDeleteProduct";
+import { formatDate, formatPrice } from "../../../../utils/format";
+import { UpdateReservationData } from "../../../../models/reservations";
+import { useForm } from "react-hook-form";
+import useUpdateReservation from "../../../../hooks/reservations/useUpdateReservation";
+import useDeleteReservation from "../../../../hooks/reservations/useDeleteReservation";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import useListCategories from "../../../../hooks/categories/useListProducts";
 
-const options = [
-  { id: 1, name: "available", label: "Disponível" },
-  { id: 2, name: "reserved", label: "Reservado" },
-];
-
-function ProductDetailsAdminPage() {
-  const { productId } = useParams();
+function ReservationDetailsAdminPage() {
+  const { reservationId } = useParams();
   const navigate = useNavigate();
 
   const {
@@ -39,30 +29,27 @@ function ProductDetailsAdminPage() {
     handleSubmit,
     reset,
     control,
-    formState: { errors },
-  } = useForm<UpdateProductData>({
+    // formState: { errors },
+  } = useForm<UpdateReservationData>({
     defaultValues: {
-      name: "",
-      description: "",
-      price: undefined,
-      image_url: "",
-      status: "",
-      category_id: undefined,
+      total_amount: 0,
+      reservation_items: [],
     },
   });
 
   const { mutateAsync: update, isSuccess: isSuccessUpdate } =
-    useUpdateProduct();
-  const { mutateAsync: deleteProduct, isSuccess: isSuccessDelete } =
-    useDeleteProduct();
-  const { data, isLoading, isError, error } = useShowProduct(productId || "");
-  const { data: categories } = useListCategories();
+    useUpdateReservation();
+  const { mutateAsync: deleteReservation, isSuccess: isSuccessDelete } =
+    useDeleteReservation();
+  const { data, isLoading, isError, error } = useShowReservation(
+    reservationId || ""
+  );
 
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
 
   const handleDelete = async () => {
-    await deleteProduct(productId || "");
+    await deleteReservation(reservationId || "");
     setOpenDelete(false);
   };
 
@@ -70,17 +57,13 @@ function ProductDetailsAdminPage() {
     if (data) {
       reset({
         id: data.id,
-        name: data.name,
-        description: data.description,
-        price: data.price,
-        image_url: data.image_url,
-        status: data.status,
-        category_id: data.category_id,
+        reservation_items: data.reservation_items,
+        total_amount: data.total_amount,
       });
     }
   }, [data, reset]);
 
-  const onSubmit = async (formData: UpdateProductData) => {
+  const onSubmit = async (formData: UpdateReservationData) => {
     try {
       await update(formData);
       setOpen(false);
@@ -91,11 +74,11 @@ function ProductDetailsAdminPage() {
 
   useEffect(() => {
     if (isSuccessUpdate) {
-      alert("Produto atualizado com sucesso!");
+      alert("Reserva atualizada com sucesso!");
     }
 
     if (isSuccessDelete) {
-      alert("Produto excluído com sucesso!");
+      alert("Reserva excluída com sucesso!");
       navigate(-1);
     }
   }, [isSuccessUpdate, isSuccessDelete, navigate]);
@@ -103,12 +86,12 @@ function ProductDetailsAdminPage() {
   if (isLoading) return <LoadingSpin />;
   if (isError)
     return (
-      <div>Error: {error?.message || "Failed to fetch product details"}</div>
+      <div>
+        Error: {error?.message || "Failed to fetch Reservation details"}
+      </div>
     );
 
-  if (!data) return <div>No product found</div>;
-  if (!categories) return <div>No categories found</div>;
-
+  if (!data) return <div>No Reservation found</div>;
   const handleCancel = () => {
     navigate(-1);
   };
@@ -123,51 +106,53 @@ function ProductDetailsAdminPage() {
                 <ArrowLeftIcon className="h-5 w-5" />
               </IconButton>
               <Typography variant="h5" className="ml-2 text-black">
-                Detalhes do Produto
+                Detalhes da Reserva
               </Typography>
             </div>
 
             <Typography color="gray" className="mt-2">
-              Informações detalhadas do produto.
+              Informações detalhadas da reserva.
             </Typography>
 
-            <div className="mt-6 flex flex-col md:flex-row">
-              <img
-                src={data.image_url}
-                alt={data.name}
-                className="md:w-60 md:h-6w-60 w-full object-cover border-2 border-gray-200 rounded-md"
-              />
-              <div className="md:ml-6 mt-4 md:mt-0">
-                <Typography
-                  variant="h5"
-                  color="blue-gray"
-                  className="font-bold mb-2"
-                >
-                  {data.name}
-                </Typography>
-                <Typography color="blue-gray" className="mb-4">
-                  {data.description}
-                </Typography>
-                <Chip
-                  variant="ghost"
-                  size="sm"
-                  className="w-32 items-center justify-center mb-2"
-                  value={
-                    data.status === "available" ? "Disponível" : "Reservado"
-                  }
-                  color={data.status === "available" ? "green" : "blue-gray"}
-                />
-                <Typography className="font-semibold text-xl">
-                  {formatPrice(data.price)}
-                </Typography>
-              </div>
+            <div className="mt-6">
+              <Typography color="blue-gray" className="font-bold mb-2">
+                Nome do cliente: {data.user_name}
+              </Typography>
+              <Typography color="blue-gray" className="font-bold mb-2">
+                Telefone do cliente: {data.user_phone}
+              </Typography>
+
+              <Typography color="blue-gray" className="font-bold mb-2">
+                Total: {formatPrice(data.total_amount)}
+              </Typography>
+
+              <Typography color="blue-gray" className="font-bold mb-2">
+                Data da reserva: {formatDate(data.reservation_timestamp)}
+              </Typography>
+
+              <Typography color="blue-gray" className="font-bold mb-2">
+                Itens:
+              </Typography>
+
+              {data.reservation_items.map((item: any) => (
+                <ul key={item.id} className="flex items-center space-x-4">
+                  <li>
+                    <Typography color="blue-gray">
+                      {item.product_name}
+                    </Typography>
+                    <Typography color="blue-gray">
+                      {formatPrice(item.price)}
+                    </Typography>
+                  </li>
+                </ul>
+              ))}
             </div>
           </div>
 
           <div className="flex justify-end space-x-4">
             <Button onClick={() => setOpen(true)}>Editar Informações</Button>
             <Button variant="outlined" onClick={() => setOpenDelete(true)}>
-              Excluir Produto
+              Excluir Reserva
             </Button>
           </div>
         </CardBody>
@@ -186,80 +171,22 @@ function ProductDetailsAdminPage() {
           >
             <DialogBody className="p-6">
               <Typography variant="h5" color="gray" className="mb-6">
-                Edição de Informações do Produto
+                Edição de Informações da Reserva
               </Typography>
 
-              <div className="mb-4">
+              <div className="flex flex-col space-y-4">
                 <Input
-                  crossOrigin=""
-                  type="text"
-                  label="Nome"
-                  {...register("name", { required: "Name is required" })}
-                  error={!!errors.name?.message}
-                />
-              </div>
-
-              <div className="mb-2">
-                <Textarea label="Descrição" {...register("description")} />
-              </div>
-
-              <div className="mb-4">
-                <Input
-                  crossOrigin=""
                   type="number"
-                  step={0.01}
-                  label="Preço"
-                  {...register("price", { required: "Price is required" })}
-                  error={!!errors.price?.message}
+                  {...register("total_amount")}
+                  className="input"
+                  label="Total"
+                  crossOrigin={control}
                 />
               </div>
 
-              <div className="mb-4 flex space-x-6">
-                <Controller
-                  control={control}
-                  name="status"
-                  render={({ field }) => (
-                    <Select
-                      label="Status"
-                      error={!!errors.status?.message}
-                      {...field}
-                    >
-                      {options.map((status) => (
-                        <Option key={status.id} value={status.name}>
-                          {status.label}
-                        </Option>
-                      ))}
-                    </Select>
-                  )}
-                />
-
-                <Controller
-                  control={control}
-                  name="category_id"
-                  render={({ field }) => (
-                    <Select
-                      label="Categoria"
-                      error={!!errors.category_id?.message}
-                      {...field}
-                    >
-                      {categories.map((category) => (
-                        <Option key={category.id} value={String(category.id)}>
-                          {category.name}
-                        </Option>
-                      ))}
-                    </Select>
-                  )}
-                />
-              </div>
-
-              <div>
-                <Input
-                  crossOrigin=""
-                  type="text"
-                  label="URL da imagem"
-                  {...register("image_url")}
-                />
-              </div>
+              <Button onClick={handleDelete} className="mt-4">
+                Produto já foi retirado
+              </Button>
             </DialogBody>
 
             <DialogFooter className="flex justify-end space-x-4 p-4 mr-2">
@@ -281,7 +208,7 @@ function ProductDetailsAdminPage() {
         >
           <DialogBody className="p-6 flex justify-center items-center h-full">
             <Typography variant="h5" color="black" className="mt-6">
-              Você tem certeza que deseja excluir este produto?
+              Você tem certeza que deseja excluir este Reserva?
             </Typography>
           </DialogBody>
 
@@ -297,4 +224,4 @@ function ProductDetailsAdminPage() {
   );
 }
 
-export default ProductDetailsAdminPage;
+export default ReservationDetailsAdminPage;

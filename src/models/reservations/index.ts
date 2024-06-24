@@ -1,6 +1,8 @@
 export interface Reservation {
   id: number;
   user_id: number;
+  user_name: string;
+  user_phone: string;
   total_amount: string;
   reservation_timestamp: string;
   reservation_items: ReservationItem[];
@@ -38,7 +40,6 @@ export interface CreateReservation {
 export interface CreateReservationItem {
   product_id: number;
   price: number;
-  quantity: number;
 }
 
 export interface UpdateReservationData {

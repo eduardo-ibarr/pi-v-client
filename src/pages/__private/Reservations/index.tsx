@@ -1,18 +1,10 @@
-import { useState, useCallback } from "react";
-import { debounce } from "lodash";
+import { useState } from "react";
 import useListreservations from "../../../hooks/reservations/useListReservations";
 import LoadingSpin from "../../../components/LoadingSpin";
-import {
-  MagnifyingGlassIcon,
-  PencilIcon,
-  ChevronUpDownIcon,
-} from "@heroicons/react/24/outline";
+import { PencilIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import {
   Typography,
-  Input,
   Button,
-  Avatar,
-  Chip,
   IconButton,
   Tooltip,
   Select,
@@ -23,10 +15,10 @@ import { formatPrice } from "../../../utils/format";
 import { useNavigate } from "react-router-dom";
 
 const TABLE_HEAD = [
-  { label: "Nome", sortKey: "name" },
-  { label: "Categoria", sortKey: "category_name" },
-  { label: "Status", sortKey: "is_active" },
-  { label: "Criado em", sortKey: "created_at" },
+  { label: "Nome do Cliente", sortKey: "user_name" },
+  { label: "Telefone", sortKey: "phone" },
+  { label: "Valor Total", sortKey: "total_amount" },
+  { label: "Data da Reserva", sortKey: "reservation_timestamp" },
   { label: "", sortKey: null },
 ];
 
@@ -56,29 +48,6 @@ export default function AdminReservationsPage() {
       ...prev,
       sortDirection,
       sort: `${newSort}:${sortDirection}`,
-    }));
-  };
-
-  const debouncedSearch = useCallback(
-    debounce((newSearch) => {
-      setQueryParams((prev) => ({
-        ...prev,
-        search: newSearch,
-        page: 1,
-      }));
-    }, 1000),
-    []
-  );
-
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    debouncedSearch(event.target.value);
-  };
-
-  const handleSeeAll = () => {
-    setQueryParams((prev) => ({
-      ...prev,
-      search: "",
-      page: 1,
     }));
   };
 
@@ -122,34 +91,26 @@ export default function AdminReservationsPage() {
     <div className="flex flex-col p-4">
       <div className="mb-4 flex items-center justify-between gap-8">
         <Typography color="gray" className="mt-1 font-normal">
-          Aqui você pode gerenciar todos os produtos cadastrados.
+          Aqui você pode gerenciar todas as reservas.
         </Typography>
       </div>
 
       <div>
         <div className="flex justify-between items-center">
-          <div className="flex flex-col items-center justify-between gap-4 md:flex-row w-1/2">
+          {/* <div className="flex flex-col items-center justify-between gap-4 md:flex-row w-1/2">
             <Input
               crossOrigin=""
-              label="Buscar um produto"
+              label="Buscar uma reserva"
               icon={<MagnifyingGlassIcon className="h-5 w-5" />}
               onChange={handleSearchChange}
             />
-          </div>
+          </div> */}
 
-          <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
+          {/* <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
             <Button variant="outlined" size="sm" onClick={handleSeeAll}>
               Ver todos
             </Button>
-            <Button
-              className="flex items-center gap-3"
-              size="sm"
-              onClick={() => navigate("/admin/reservations/new")}
-            >
-              <PencilIcon strokeWidth={2} className="h-4 w-4" />
-              Adicionar Produto
-            </Button>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -177,9 +138,15 @@ export default function AdminReservationsPage() {
           </tr>
         </thead>
         <tbody>
-          {/* {reservationsData.items.map(
+          {reservationsData.items.map(
             (
-              { user_id, id },
+              {
+                user_name,
+                id,
+                reservation_timestamp,
+                total_amount,
+                user_phone,
+              },
               index
             ) => {
               const isLast = index === reservationsData.items.length - 1;
@@ -188,59 +155,41 @@ export default function AdminReservationsPage() {
               return (
                 <tr key={index} className="even:bg-gray-100">
                   <td className={classes}>
-                    <div className="flex items-center gap-3">
-                      <Avatar src={image_url} alt={name} size="sm" />
-
-                      <div>
-                        <Tooltip content={name}>
-                          <Typography
-                            variant="small"
-                            color="gray"
-                            className="font-normal"
-                          >
-                            {name.length > 30
-                              ? name.substring(0, 30) + "..."
-                              : name}
-                          </Typography>
-                        </Tooltip>
-
-                        <Typography
-                          variant="small"
-                          color="gray"
-                          className="font-normal"
-                        >
-                          {formatPrice(price)}
-                        </Typography>
-                      </div>
-                    </div>
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      {user_name}
+                    </Typography>
                   </td>
+
                   <td className={classes}>
                     <Typography
                       variant="small"
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {category_name}
+                      {user_phone}
+                    </Typography>
+                  </td>
+
+                  <td className={classes}>
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      {formatPrice(parseFloat(total_amount))}
                     </Typography>
                   </td>
                   <td className={classes}>
-                    <Chip
-                      variant="ghost"
-                      size="sm"
-                      className="items-center justify-center w-28"
-                      value={
-                        status === "available" ? "Disponível" : "Reservado"
-                      }
-                      color={status === "available" ? "green" : "blue-gray"}
-                    />
-                  </td>
-                  <td className={classes}>
                     <Typography
                       variant="small"
                       color="blue-gray"
                       className="font-normal"
                     >
-                      {moment(created_at).format("DD/MM/YYYY")}
+                      {moment(reservation_timestamp).format("DD/MM/YYYY")}
                     </Typography>
                   </td>
                   <td className={classes}>
@@ -256,7 +205,7 @@ export default function AdminReservationsPage() {
                 </tr>
               );
             }
-          )} */}
+          )}
         </tbody>
       </table>
 
