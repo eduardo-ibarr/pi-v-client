@@ -19,6 +19,9 @@ import Layout from "./styles/Layout";
 import Logout from "./pages/Logout";
 import CreateProductPage from "./pages/__private/Products/create";
 import AdminLayout from "./styles/AdminLayout";
+import AdminCategoriesPage from "./pages/__private/Categories";
+import CategoryDetailsAdminPage from "./pages/__private/Categories/show";
+import CreateCategoryPage from "./pages/__private/Categories/create";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +51,30 @@ const router = createBrowserRouter([
             element: (
               <AdminLayout pageName="Dashboard">
                 <DashboardPage userName="" />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: "categories",
+            element: (
+              <AdminLayout pageName="Página de Categorias">
+                <AdminCategoriesPage />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: "categories/:categoryId",
+            element: (
+              <AdminLayout pageName="Detalhes da Categoria">
+                <CategoryDetailsAdminPage />
+              </AdminLayout>
+            ),
+          },
+          {
+            path: "categories/new",
+            element: (
+              <AdminLayout pageName="Nova Categoria">
+                <CreateCategoryPage />
               </AdminLayout>
             ),
           },

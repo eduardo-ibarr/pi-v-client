@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import useListCategories from "../../../../hooks/categories/useListProducts";
+import useListCategories from "../../../../hooks/categories/useListCategories";
 import LoadingSpin from "../../../../components/LoadingSpin";
 import { CreateProductData } from "../../../../models/products";
 import useCreateProduct from "../../../../hooks/products/useCreateProduct";
