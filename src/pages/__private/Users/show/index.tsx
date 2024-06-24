@@ -16,7 +16,6 @@ import {
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useForm, Controller } from "react-hook-form";
 import LoadingSpin from "../../../../components/LoadingSpin";
-import useListCategories from "../../../../hooks/categories/useListProducts";
 import useShowUser from "../../../../hooks/users/useShowUser";
 import useUpdateUser from "../../../../hooks/users/useUpdateUser";
 import useDeleteUser from "../../../../hooks/users/useDeleteUser";
@@ -52,7 +51,6 @@ function UserDetailsAdminPage() {
   const { data, isLoading, isError, error } = useShowUser(
     parseInt(userId || "")
   );
-  const { data: categories } = useListCategories();
 
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -98,7 +96,6 @@ function UserDetailsAdminPage() {
     return <div>Error: {error?.message || "Failed to fetch User details"}</div>;
 
   if (!data) return <div>No User found</div>;
-  if (!categories) return <div>No categories found</div>;
 
   const handleCancel = () => {
     navigate(-1);
