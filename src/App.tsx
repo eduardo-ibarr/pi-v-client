@@ -19,6 +19,7 @@ import Layout from "./styles/Layout";
 import Logout from "./pages/Logout";
 import CreateProductPage from "./pages/__private/Products/create";
 import AdminLayout from "./styles/AdminLayout";
+import AdminReservationsPage from "./pages/__private/Reservations";
 
 const queryClient = new QueryClient();
 
@@ -76,7 +77,14 @@ const router = createBrowserRouter([
             ),
           },
           { path: "categories", element: <p>Categories</p> },
-          { path: "orders", element: <p>Orders</p> },
+          {
+            path: "reservations",
+            element: (
+              <AdminLayout pageName="Reservas">
+                <AdminReservationsPage />
+              </AdminLayout>
+            ),
+          },
           { path: "users", element: <p>Users</p> },
         ],
       },
