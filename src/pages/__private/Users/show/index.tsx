@@ -28,6 +28,7 @@ const options = [
 
 function UserDetailsAdminPage() {
   const { userId } = useParams();
+  const id = userId ?? ""; // Provide a default value for userId when it is undefined
   const navigate = useNavigate();
 
   const {
@@ -45,7 +46,9 @@ function UserDetailsAdminPage() {
     },
   });
 
-  const { mutateAsync: update, isSuccess: isSuccessUpdate } = useUpdateUser();
+  const { mutateAsync: update, isSuccess: isSuccessUpdate } = useUpdateUser(
+    +id
+  );
   const { mutateAsync: deleteUser, isSuccess: isSuccessDelete } =
     useDeleteUser();
   const { data, isLoading, isError, error } = useShowUser(

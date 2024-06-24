@@ -2,20 +2,8 @@ import { useState, useCallback } from "react";
 import { debounce } from "lodash";
 import useListUsers from "../../../hooks/users/useListUsers";
 import LoadingSpin from "../../../components/LoadingSpin";
-import {
-  MagnifyingGlassIcon,
-  PencilIcon,
-  ChevronUpDownIcon,
-} from "@heroicons/react/24/outline";
-import {
-  Typography,
-  Input,
-  Button,
-  IconButton,
-  Tooltip,
-  Select,
-  Option,
-} from "@material-tailwind/react";
+import { PencilIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
+import { Typography, IconButton, Tooltip } from "@material-tailwind/react";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 
@@ -213,7 +201,7 @@ export default function AdminUsersPage() {
                   <Tooltip content="Editar">
                     <IconButton
                       variant="text"
-                      onClick={() => navigate(`/admin/Users/${id}`)}
+                      onClick={() => navigate(`/admin/users/${id}`)}
                     >
                       <PencilIcon className="h-4 w-4" />
                     </IconButton>

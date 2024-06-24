@@ -21,6 +21,17 @@ export class UsersServices {
     }
   }
 
+  static async update(id: number, data: UpdateProfileData) {
+    try {
+      const response = await client.put(`/users/${id}`, data);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data.message);
+      }
+    }
+  }
+
   static async getById(id: number) {
     try {
       const response = await client.get(`/users/${id}`);
