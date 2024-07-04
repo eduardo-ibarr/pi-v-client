@@ -29,6 +29,13 @@ export class ProductsServices {
         url += `&search=${encodeURIComponent(data.search)}`;
       }
       const response = await client.get(url);
+
+      const activeProducts = response.data.items.filter(
+        (product: any) => product.is_active
+      );
+
+      response.data.items = activeProducts;
+
       return response.data as ProductsPaginated;
     } catch (error) {
       if (error instanceof AxiosError) {
