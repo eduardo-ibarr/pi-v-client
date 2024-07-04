@@ -34,8 +34,6 @@ function HomePage() {
     return <LoadingSpin />;
   }
 
-  console.log(data);
-
   const slicedProducts = (data?.items || []).slice(0, 4);
 
   return (
@@ -52,11 +50,11 @@ function HomePage() {
             href="https://www.instagram.com/brechocomunitariosantiago/"
             target="_blank"
             rel="noopener noreferrer"
-            className="mr-2"
+            className="mr-2 flex items-center gap-3"
           >
-            <FaInstagram size={60} color="#993399" />
+            <FaInstagram size={40} />
+            <Typography className=" text-xl">Siga-nos no Instagram</Typography>
           </a>
-          <Typography className=" text-xl">SIGA-NOS NO INSTAGRAM</Typography>
         </div>
       </main>
     </>
