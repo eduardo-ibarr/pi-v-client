@@ -59,7 +59,7 @@ function UserDetailsAdminPage() {
   const [openDelete, setOpenDelete] = useState(false);
 
   const handleDelete = async () => {
-    await deleteUser(userId || "");
+    await deleteUser(parseInt(userId || ""));
     setOpenDelete(false);
   };
 
