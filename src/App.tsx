@@ -26,6 +26,8 @@ import ReservationDetailsAdminPage from "./pages/__private/Reservations/show";
 import Layout from "./styles/Layout";
 import AdminProductsPage from "./pages/__private/Products";
 import AdminDashboard from "./pages/__private/Dashboard";
+import AboutPage from "./pages/About";
+import ProductsPage from "./pages/Products";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +46,22 @@ const router = createBrowserRouter([
       },
       { path: "login", element: <LoginPage /> },
       { path: "logout", element: <Logout /> },
+      {
+        path: "products",
+        element: (
+          <Layout>
+            <ProductsPage />
+          </Layout>
+        ),
+      },
+      {
+        path: "about",
+        element: (
+          <Layout>
+            <AboutPage />
+          </Layout>
+        ),
+      },
       { path: "register", element: <RegisterPage /> },
       { path: "forgot-password", element: <ForgotPassword /> },
       {

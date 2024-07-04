@@ -85,8 +85,6 @@ export default function AdminReservationsPage() {
     return null;
   }
 
-  console.log(reservationsData);
-
   return (
     <div className="flex flex-col p-4">
       <div className="mb-4 flex items-center justify-between gap-8">

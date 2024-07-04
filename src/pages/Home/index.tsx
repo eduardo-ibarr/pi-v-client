@@ -1,7 +1,7 @@
 import Carousel from "../../components/Carousel";
 import useListProducts from "../../hooks/products/useListProducts";
 import PromotionalBanner from "../../components/PromotionalBanner";
-import NewArrivalsSection from "../../components/NewArrivalsSection";
+import EmphasisSection from "../../components/EmphasisSection";
 import TrendingStylesSection from "../../components/TrendingStylesSection";
 import { FaInstagram } from "react-icons/fa";
 import useFeed from "../../hooks/instagram/useFeed";
@@ -43,7 +43,7 @@ function HomePage() {
         <div className="mt-8 flex justify-center">
           <Carousel images={imagesFeed} />
         </div>
-        <NewArrivalsSection products={slicedProducts} />
+        <EmphasisSection products={slicedProducts} />
         <TrendingStylesSection products={slicedProducts} />
         <div className="mt-8 flex justify-center items-center">
           <a

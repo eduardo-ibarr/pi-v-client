@@ -16,13 +16,19 @@ interface Props {
 
 export function ProductCard({ product }: Props) {
   return (
-    <Card className="w-80">
-      <CardHeader shadow={false} floated={false}>
-        <img
-          src={product.image_url}
-          alt="card-image"
-          className="h-full w-full object-cover"
-        />
+    <Card className="w-72">
+      <CardHeader
+        shadow={false}
+        floated={false}
+        className="flex justify-center"
+      >
+        <div>
+          <img
+            src={product.image_url}
+            alt="card-image"
+            className="max-w-56 max-h-56 w-auto h-auto object-cover rounded-md"
+          />
+        </div>
       </CardHeader>
       <CardBody className="flex flex-col h-52">
         <Typography color="blue-gray" className="font-medium">
