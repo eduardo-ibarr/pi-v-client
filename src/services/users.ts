@@ -10,7 +10,7 @@ import {
 import { client } from "./client";
 
 export class UsersServices {
-  static async register(data: RegisterData) {
+  async register(data: RegisterData) {
     try {
       const response = await client.post("/users", data);
       return response.data;
@@ -21,7 +21,7 @@ export class UsersServices {
     }
   }
 
-  static async update(id: number, data: UpdateProfileData) {
+  async update(id: number, data: UpdateProfileData) {
     try {
       const response = await client.put(`/users/${id}`, data);
       return response.data;
@@ -32,7 +32,7 @@ export class UsersServices {
     }
   }
 
-  static async getById(id: number) {
+  async getById(id: number) {
     try {
       const response = await client.get(`/users/${id}`);
       return response.data;
@@ -43,7 +43,7 @@ export class UsersServices {
     }
   }
 
-  static async list() {
+  async list() {
     try {
       const response = await client.get("/users");
       return response.data as User[];
@@ -54,7 +54,7 @@ export class UsersServices {
     }
   }
 
-  static async updateProfile(data: UpdateProfileData) {
+  async updateProfile(data: UpdateProfileData) {
     try {
       const response = await client.put("/users", data);
       return response.data;
@@ -65,7 +65,7 @@ export class UsersServices {
     }
   }
 
-  static async updatePassword(data: UpdatePasswordData) {
+  async updatePassword(data: UpdatePasswordData) {
     try {
       const response = await client.put("/users/password", data);
       return response.data;
@@ -76,7 +76,7 @@ export class UsersServices {
     }
   }
 
-  static async forgotPassword(data: ForgotPasswordData) {
+  async forgotPassword(data: ForgotPasswordData) {
     try {
       const response = await client.post("/users/forgot-password", data);
       return response.data;
@@ -87,9 +87,20 @@ export class UsersServices {
     }
   }
 
-  static async resetPassword(data: ResetPasswordData) {
+  async resetPassword(data: ResetPasswordData) {
     try {
       const response = await client.post("/users/reset-password", data);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data.message);
+      }
+    }
+  }
+
+  async delete(id: number) {
+    try {
+      const response = await client.delete(`/users/${id}`);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {

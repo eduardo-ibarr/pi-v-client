@@ -10,7 +10,7 @@ import {
 } from "../models/trackings";
 
 export class TrackingsService {
-  static async createEvent(event: CreateEventData): Promise<Event> {
+  async createEvent(event: CreateEventData): Promise<Event> {
     try {
       const response = await client.post("/trackings", event);
       return response.data;
@@ -23,7 +23,7 @@ export class TrackingsService {
     }
   }
 
-  static async createPageView(pageView: CreatePageViewData): Promise<PageView> {
+  async createPageView(pageView: CreatePageViewData): Promise<PageView> {
     try {
       const response = await client.post("/trackings/page_views", pageView);
       return response.data;
@@ -36,7 +36,7 @@ export class TrackingsService {
     }
   }
 
-  static async createProductView(
+  async createProductView(
     productView: CreateProductViewData
   ): Promise<ProductView> {
     try {
@@ -54,7 +54,7 @@ export class TrackingsService {
     }
   }
 
-  static async getEventById(eventId: number): Promise<Event | null> {
+  async getEventById(eventId: number): Promise<Event | null> {
     try {
       const response = await client.get(`/trackings/${eventId}`);
       return response.data;
@@ -71,7 +71,7 @@ export class TrackingsService {
     }
   }
 
-  static async getPageViewById(eventId: number): Promise<PageView | null> {
+  async getPageViewById(eventId: number): Promise<PageView | null> {
     try {
       const response = await client.get(`/trackings/page_views/${eventId}`);
       return response.data;
@@ -88,9 +88,7 @@ export class TrackingsService {
     }
   }
 
-  static async getProductViewById(
-    eventId: number
-  ): Promise<ProductView | null> {
+  async getProductViewById(eventId: number): Promise<ProductView | null> {
     try {
       const response = await client.get(`/trackings/product_views/${eventId}`);
       return response.data;
@@ -107,7 +105,7 @@ export class TrackingsService {
     }
   }
 
-  static async listEvents(): Promise<Event[]> {
+  async listEvents(): Promise<Event[]> {
     try {
       const response = await client.get("/trackings");
       return response.data;
@@ -120,7 +118,7 @@ export class TrackingsService {
     }
   }
 
-  static async listPageViews(): Promise<PageView[]> {
+  async listPageViews(): Promise<PageView[]> {
     try {
       const response = await client.get("/trackings/page_views");
       return response.data;
@@ -133,7 +131,7 @@ export class TrackingsService {
     }
   }
 
-  static async listProductViews(): Promise<ProductView[]> {
+  async listProductViews(): Promise<ProductView[]> {
     try {
       const response = await client.get("/trackings/product_views");
       return response.data;

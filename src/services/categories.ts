@@ -7,7 +7,7 @@ import {
 } from "../models/categories";
 
 export class CategoriesServices {
-  static async create(data: CreateCategoryData) {
+  async create(data: CreateCategoryData) {
     try {
       const response = await client.post("/categories", data);
       return response.data;
@@ -18,7 +18,7 @@ export class CategoriesServices {
     }
   }
 
-  static async list(): Promise<Category[] | undefined> {
+  async list(): Promise<Category[] | undefined> {
     try {
       const response = await client.get("/categories");
       return response.data;
@@ -29,7 +29,7 @@ export class CategoriesServices {
     }
   }
 
-  static async delete(id: string) {
+  async delete(id: string) {
     try {
       const response = await client.delete(`/categories/${id}`);
       return response.data;
@@ -40,7 +40,7 @@ export class CategoriesServices {
     }
   }
 
-  static async update({ id, ...data }: UpdateCategoryData) {
+  async update({ id, ...data }: UpdateCategoryData) {
     try {
       const response = await client.put(`/categories/${id}`, data);
       return response.data;
@@ -51,7 +51,7 @@ export class CategoriesServices {
     }
   }
 
-  static async show(id: string) {
+  async show(id: string) {
     try {
       const response = await client.get(`/categories/${id}`);
       return response.data;
@@ -62,7 +62,7 @@ export class CategoriesServices {
     }
   }
 
-  static async search(query: string) {
+  async search(query: string) {
     try {
       const response = await client.get(`/categories/search?q=${query}`);
       return response.data;

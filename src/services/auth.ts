@@ -3,7 +3,7 @@ import { LoginData } from "../models/auth";
 import { client } from "./client";
 
 export class AuthServices {
-  static async login(data: LoginData) {
+  async login(data: LoginData) {
     try {
       const response = await client.post("/auth/login", data);
       return response.data;
@@ -14,7 +14,7 @@ export class AuthServices {
     }
   }
 
-  static async logout() {
+  async logout() {
     try {
       const response = await client.post("/auth/logout");
       return response.data;

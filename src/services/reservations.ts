@@ -8,7 +8,7 @@ import {
 } from "../models/reservations";
 
 export class ReservationsServices {
-  static async create(data: CreateReservation) {
+  async create(data: CreateReservation) {
     try {
       const response = await client.post("/reservations", data);
       return response.data;
@@ -19,7 +19,7 @@ export class ReservationsServices {
     }
   }
 
-  static async list(
+  async list(
     data: QueryListReservations
   ): Promise<ReservationsPaginated | undefined> {
     try {
@@ -39,7 +39,7 @@ export class ReservationsServices {
     }
   }
 
-  static async delete(id: string) {
+  async delete(id: string) {
     try {
       const response = await client.delete(`/reservations/${id}`);
       return response.data;
@@ -50,7 +50,7 @@ export class ReservationsServices {
     }
   }
 
-  static async update({ id, ...data }: UpdateReservationData) {
+  async update({ id, ...data }: UpdateReservationData) {
     try {
       const response = await client.put(`/reservations/${id}`, data);
       return response.data;
@@ -61,7 +61,7 @@ export class ReservationsServices {
     }
   }
 
-  static async show(id: string) {
+  async show(id: string) {
     try {
       const response = await client.get(`/reservations/${id}`);
       return response.data;
@@ -72,7 +72,7 @@ export class ReservationsServices {
     }
   }
 
-  static async search(query: string) {
+  async search(query: string) {
     try {
       const response = await client.get(`/reservations/search?q=${query}`);
       return response.data;

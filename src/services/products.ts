@@ -8,7 +8,7 @@ import {
 } from "../models/products";
 
 export class ProductsServices {
-  static async create(data: CreateProductData) {
+  async create(data: CreateProductData) {
     try {
       const response = await client.post("/products", data);
       return response.data;
@@ -19,9 +19,7 @@ export class ProductsServices {
     }
   }
 
-  static async list(
-    data: QueryListProducts
-  ): Promise<ProductsPaginated | undefined> {
+  async list(data: QueryListProducts): Promise<ProductsPaginated | undefined> {
     try {
       let url = `/products?page=${data.page}&limit=${data.limit}`;
       if (data.sort) {
@@ -39,7 +37,7 @@ export class ProductsServices {
     }
   }
 
-  static async delete(id: string) {
+  async delete(id: string) {
     try {
       const response = await client.delete(`/products/${id}`);
       return response.data;
@@ -50,7 +48,7 @@ export class ProductsServices {
     }
   }
 
-  static async update({ id, ...data }: UpdateProductData) {
+  async update({ id, ...data }: UpdateProductData) {
     try {
       const response = await client.put(`/products/${id}`, data);
       return response.data;
@@ -61,7 +59,7 @@ export class ProductsServices {
     }
   }
 
-  static async show(id: string) {
+  async show(id: string) {
     try {
       const response = await client.get(`/products/${id}`);
       return response.data;
@@ -72,7 +70,7 @@ export class ProductsServices {
     }
   }
 
-  static async search(query: string) {
+  async search(query: string) {
     try {
       const response = await client.get(`/products/search?q=${query}`);
       return response.data;
